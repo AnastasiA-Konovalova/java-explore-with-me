@@ -1,14 +1,27 @@
 services:
+  stats-db:
+    image: postgres:17.0
+    container_name: stats-db
+    ports:
+      - "25432:5432"
+    environment:
+      POSTGRES_DB: stats-db
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+
+    #healthcheck:
+    #  test: ["CMD-SHELL", "pg_isready -U pgadmin -d stats"]
+    #  interval: 10s
+    #  timeout: 5s
+    #  retries: 5
+
   stats-server:
+    build: stats/stats-server
+    container_name: stats-server
     ports:
       - "9090:9090"
+    depends_on:
+      - stats-db
 
-  stats-db:
-    image: postgres:16.1
-
-  ewm-service:
-    ports:
-      - "8080:8080"
-
-  ewm-db:
-    image: postgres:16.1
+volumes:
+  pgdata:
