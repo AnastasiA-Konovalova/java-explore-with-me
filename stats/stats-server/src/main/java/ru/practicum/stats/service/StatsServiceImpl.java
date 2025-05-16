@@ -8,6 +8,7 @@ import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.stats.mapper.EndpointHitMapper;
 import ru.practicum.stats.model.EndpointHit;
+import ru.practicum.stats.projection.ViewStatsProjection;
 import ru.practicum.stats.repository.StatsRepository;
 
 import java.time.LocalDateTime;
@@ -29,25 +30,24 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ViewStatsDto> get(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        if (start == null || end == null) {
-            throw new IllegalArgumentException("Даты не могут быть null");
-        }
-        if (start.isAfter(end)) {
-            throw new IllegalArgumentException("Начальная дата " + start + " должна быть до конечной " + end);
+    public List<ViewStatsProjection> get(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+        if (start == null || end == null || start.isAfter(end)) {
+            throw new IllegalArgumentException("Начало " + start + " и конец временного промежутка " + end + " должны " +
+                    "быть указаны и быть в верной последовательности");
         }
 
-        boolean isUrisEmptyOrNull = uris == null || uris.isEmpty();
-        if (isUrisEmptyOrNull) {
-            List<ViewStatsDto> result = unique
-                    ? statsRepository.findAllNotUrisStatsUnique(start, end)
-                    : statsRepository.findAllNotUrisStats(start, end);
-            return result;
+        if (uris == null || uris.isEmpty()) {
+            if (unique) {
+                return statsRepository.findAllNotUrisStatsUnique(start, end);
+            } else {
+                return statsRepository.findAllNotUrisStats(start, end);
+            }
         } else {
-            List<ViewStatsDto> result = unique
-                    ? statsRepository.findAllStatsUnique(start, end, uris)
-                    : statsRepository.findAllStats(start, end, uris);
-            return result;
+            if (unique) {
+                return statsRepository.findAllStatsUnique(start, end, uris);
+            } else {
+                return statsRepository.findAllStats(start, end, uris);
+            }
         }
     }
 }
