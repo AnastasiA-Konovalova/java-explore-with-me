@@ -1,14 +1,35 @@
+version: '3.8'
+
 services:
+  stats-db:
+    image: postgres:17
+    container_name: stats-db
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./stats/stats-server/src/main/resources/sсhema.sql:/docker-entrypoint-initdb.d/sсhema.sql
+    environment:
+      POSTGRES_DB: stats_db
+      POSTGRES_USER: pgadmin
+      POSTGRES_PASSWORD: pgadmin
+
   stats-server:
+    build: stats/stats-server
+    container_name: stats-server
     ports:
       - "9090:9090"
-
-  stats-db:
-    image: postgres:16.1
+    depends_on:
+      - stats-db
 
   ewm-service:
+    build: ./ewm-service
+    container_name: ewm-service
     ports:
       - "8080:8080"
+    depends_on:
+      - stats-server
+      - stats-db
 
-  ewm-db:
-    image: postgres:16.1
+volumes:
+  pgdata:
