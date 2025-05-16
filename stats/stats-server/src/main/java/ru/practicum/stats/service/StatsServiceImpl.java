@@ -35,12 +35,26 @@ public class StatsServiceImpl implements StatsService {
                     "быть указаны и быть в верной последовательности");
         }
 
-        if (unique) {
-            System.out.println(statsRepository.findAllStatsUnique(start, end, uris));
-            return statsRepository.findAllStatsUnique(start, end, uris);
+        if (uris.isEmpty()) {
+            if (unique) {
+                return statsRepository.findAllNotUrisStatsUnique(start, end);
+            } else {
+                return statsRepository.findAllNotUrisStats(start, end);
+            }
         } else {
-            System.out.println(statsRepository.findAllStats(start, end, uris));
-            return statsRepository.findAllStats(start, end, uris);
+            if (unique) {
+                return statsRepository.findAllStatsUnique(start, end, uris);
+            } else {
+                return statsRepository.findAllStats(start, end, uris);
+            }
         }
+
+//        if (unique) {
+//            System.out.println(statsRepository.findAllStatsUnique(start, end, uris));
+//            return statsRepository.findAllStatsUnique(start, end, uris);
+//        } else {
+//            System.out.println(statsRepository.findAllStats(start, end, uris));
+//            return statsRepository.findAllStats(start, end, uris);
+//        }
     }
 }

@@ -12,6 +12,25 @@ import java.util.List;
 @Repository
 public interface StatsRepository extends org.springframework.data.jpa.repository.JpaRepository<EndpointHit, Integer> {
 
+    @Query("SELECT new ru.practicum.dto.ViewStatsDto(e.app, null, COUNT(e.ip)) " +
+            "FROM EndpointHit e " +
+            "WHERE e.timestamp BETWEEN :start AND :end " +
+            "GROUP BY e.app " +
+            "ORDER BY COUNT(e.ip) DESC")
+    List<ViewStatsDto> findAllNotUrisStats(
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end
+    );
+
+    @Query("SELECT new ru.practicum.dto.ViewStatsDto(e.app, null, COUNT(DISTINCT e.ip)) " +
+            "FROM EndpointHit e " +
+            "WHERE e.timestamp BETWEEN :start AND :end " +
+            "GROUP BY e.app " +
+            "ORDER BY COUNT(DISTINCT e.ip) DESC")
+    List<ViewStatsDto> findAllNotUrisStatsUnique(@Param("start") LocalDateTime start,
+                                                 @Param("end") LocalDateTime end
+    );
+
     @Query("SELECT new ru.practicum.dto.ViewStatsDto(e.app, e.uri, COUNT(e.ip)) " +
             "FROM EndpointHit e " +
             "WHERE e.timestamp BETWEEN :start AND :end " +
