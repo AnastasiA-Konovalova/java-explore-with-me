@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
-//@RestControllerAdvice
+@RestControllerAdvice
 public class ErrorHandler {
 
     @ExceptionHandler({ValidationException.class, MethodArgumentNotValidException.class})
@@ -37,6 +37,13 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleIllegalStateException(final IllegalStateException e) {
         log.error("Выброшено исключение, конфликт: {}", e.getMessage());
+        return new ErrorResponse("Другая ошибка: ", e.getMessage());
+    }
+
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleCommonException(final Throwable e) {
+        log.error("Выброшено исключение,: {}", e.getMessage());
         return new ErrorResponse("Другая ошибка: ", e.getMessage());
     }
 }
