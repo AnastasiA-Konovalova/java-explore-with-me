@@ -3,6 +3,7 @@ package ru.practicum.stats.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +34,6 @@ public class StatsController {
                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
                                        @RequestParam List<String> uris,
                                        @RequestParam(required = false, defaultValue = "false") Boolean unique) {
-        return statsService.get(start, end, uris, unique);
-    }
+        List<ViewStatsDto> stats = statsService.get(start, end, uris, unique);
+        return ResponseEntity.ok(stats).getBody();    }
 }
