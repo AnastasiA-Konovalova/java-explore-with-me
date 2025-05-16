@@ -17,5 +17,15 @@ services:
     depends_on:
       - stats-db
 
+  ewm-service:
+    build: ./ewm-service
+    container_name: ewm-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - stats-server
+      - stats-db
+
 volumes:
   pgdata:
+    
