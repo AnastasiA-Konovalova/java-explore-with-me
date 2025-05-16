@@ -2,10 +2,11 @@ services:
   stats-db:
     image: postgres:17.0
     container_name: stats-db
+
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: stats-db
+      POSTGRES_DB: stats
       POSTGRES_USER: test
       POSTGRES_PASSWORD: test
 
@@ -16,6 +17,11 @@ services:
       - "9090:9090"
     depends_on:
       - stats-db
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-h", "stats-db", "-p", "5432" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   ewm-service:
     build: ./ewm-service
