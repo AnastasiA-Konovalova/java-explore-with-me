@@ -1,9 +1,11 @@
+package ru.practicum;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = "ru.practicum.client")
-public class StatsClientApp {
+@SpringBootApplication
+public class ExploreServiceApp {
     public static void main(String[] args) {
-        SpringApplication.run(StatsClientApp.class, args);
+        SpringApplication.run(ExploreServiceApp.class, args);
     }
 }

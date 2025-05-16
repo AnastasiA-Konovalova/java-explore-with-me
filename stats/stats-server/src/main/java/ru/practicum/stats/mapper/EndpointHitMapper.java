@@ -1,10 +1,7 @@
 package ru.practicum.stats.mapper;
 
 import ru.practicum.dto.EndpointHitDto;
-import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.stats.model.EndpointHit;
-
-import java.util.List;
 
 public class EndpointHitMapper {
 
@@ -26,15 +23,5 @@ public class EndpointHitMapper {
         endpointHit.setTimestamp(endpointHitDto.getTimestamp());
 
         return endpointHit;
-    }
-
-    public static List<ViewStatsDto> toViewDto(List<ViewStatsDto> hits) {
-        return hits.stream()
-                .map(stat -> ViewStatsDto.builder()
-                        .app(stat.getApp())
-                        .uri(stat.getUri())
-                        .hits(stat.getHits())
-                        .build())
-                .toList();
     }
 }

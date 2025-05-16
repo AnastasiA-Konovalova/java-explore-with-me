@@ -18,7 +18,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-//@RequestMapping("/")
 public class StatsController {
 
     private final StatsService statsService;
@@ -34,7 +33,6 @@ public class StatsController {
                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
                                        @RequestParam List<String> uris,
                                        @RequestParam(required = false, defaultValue = "false") Boolean unique) {
-        System.out.println("Вызван метод getStats");
         return statsService.get(start, end, uris, unique);
     }
 }

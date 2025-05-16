@@ -26,7 +26,7 @@ public class EndpointHit {
     @Column(name = "uri", nullable = false)
     private String uri;
 
-    @Column(name ="ip", nullable = false)
+    @Column(name = "ip", nullable = false)
     private String ip;
 
     @Column(name = "act_time", nullable = false)
