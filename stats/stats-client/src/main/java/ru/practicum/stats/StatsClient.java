@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.practicum.dto.EndpointHitDto;
+import ru.practicum.dto.StatsRequestDto;
 import ru.practicum.dto.ViewStatsDto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -50,23 +50,25 @@ public class StatsClient {
             throw new ValidationException("Ошибка при записи обращения к событию (путь hit), код " + response.getStatusCode());
         } else if (response.getStatusCode().is5xxServerError()) {
             throw new InternalServerException("Ошибка при записи обращения к событию (путь hit), код " + response.getStatusCode());
+        } else if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("Другая ошибка при записи обращения к событию (путь hit), код " + response.getStatusCode());
         }
     }
 
-    public List<ViewStatsDto> get(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+    public List<ViewStatsDto> get(StatsRequestDto statsRequestDto) {
         String uri = UriComponentsBuilder.fromHttpUrl(serverUrl)
                 .path("/stats")
-                .queryParam("start", start)
-                .queryParam("end", end)
-                .queryParam("uris", String.join(",", uris))
-                .queryParam("unique", unique)
+                .queryParam("start", statsRequestDto.getStart())
+                .queryParam("end", statsRequestDto.getEnd())
+                .queryParam("uris", String.join(",", statsRequestDto.getUris()))
+                .queryParam("unique", statsRequestDto.getUnique())
                 .toUriString();
 
         ResponseEntity<List<ViewStatsDto>> response = rest.exchange(
                 uri,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<ViewStatsDto>>() {
+                new ParameterizedTypeReference<>() {
                 }
         );
 
@@ -74,8 +76,9 @@ public class StatsClient {
             throw new NotFoundException("Ошибка при запросе статистики (путь stats)");
         } else if (response.getStatusCode().is5xxServerError()) {
             throw new InternalServerException("Ошибка сервера (путь stats)");
+        } else if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("Другая ошибка при запросе статистики (путь stats), код " + response.getStatusCode());
         }
-
         return response.getBody();
     }
 }
