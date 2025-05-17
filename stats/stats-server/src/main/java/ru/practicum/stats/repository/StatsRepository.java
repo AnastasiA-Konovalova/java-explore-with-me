@@ -1,5 +1,6 @@
 package ru.practicum.stats.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface StatsRepository extends org.springframework.data.jpa.repository.JpaRepository<EndpointHit, Integer> {
+public interface StatsRepository extends JpaRepository<EndpointHit, Integer> {
     @Query(value = "SELECT a.name, e.uri, COUNT(*) AS hits " +
             "FROM endpoint_hits e " +
             "JOIN apps a ON e.app = a.id " +

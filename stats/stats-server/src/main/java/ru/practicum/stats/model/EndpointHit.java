@@ -21,7 +21,7 @@ public class EndpointHit {
     private Integer id;
 
     @Column(name = "app", nullable = false)
-    private String app;
+    private App app;
 
     @Column(name = "uri", nullable = false)
     private String uri;
