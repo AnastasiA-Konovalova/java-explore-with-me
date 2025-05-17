@@ -26,10 +26,11 @@ public class StatsServiceImpl implements StatsService {
     @Override
     @Transactional
     public void save(EndpointHitDto endpointHitDto) {
-        EndpointHit endpointHit = EndpointHitMapper.toEntity(endpointHitDto);
         String appName = endpointHitDto.getApp();
         App app = appRepository.findByName(appName)
                 .orElseThrow(() -> new IllegalArgumentException("Приложение с именем " + appName + " не найдено"));
+        EndpointHit endpointHit = EndpointHitMapper.toEntity(endpointHitDto, app);
+
         endpointHit.setApp(app);
         // по имени app найти App
         // endpointHit.set(app)
