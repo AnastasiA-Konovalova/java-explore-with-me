@@ -11,31 +11,34 @@ import java.util.List;
 
 @Repository
 public interface StatsRepository extends org.springframework.data.jpa.repository.JpaRepository<EndpointHit, Integer> {
-    @Query(value = "SELECT app, uri, COUNT(*) AS hits " +
+    @Query(value = "SELECT a.name, e.uri, COUNT(*) AS hits " +
             "FROM endpoint_hits e " +
+            "JOIN apps a ON e.app = a.id " +
             "WHERE e.act_time BETWEEN :start AND :end " +
-            "GROUP BY e.app, e.uri " +
-            "ORDER BY COUNT(e.ip) DESC", nativeQuery = true)
+            "GROUP BY a.name, e.uri " +
+            "ORDER BY hits DESC", nativeQuery = true)
     List<ViewStatsProjection> findAllNotUrisStats(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
     );
 
-    @Query(value = "SELECT app, uri, COUNT(DISTINCT e.ip) AS hits " +
+    @Query(value = "SELECT a.app, e.uri, COUNT(DISTINCT e.ip) AS hits " +
             "FROM endpoint_hits e " +
+            "JOIN apps a ON e.app = a.id " +
             "WHERE e.act_time BETWEEN :start AND :end " +
-            "GROUP BY e.app, e.uri " +
+            "GROUP BY a.name, e.uri " +
             "ORDER BY hits DESC", nativeQuery = true)
     List<ViewStatsProjection> findAllNotUrisStatsUnique(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
     );
 
-    @Query(value = "SELECT app, uri, COUNT(*) AS hits " +
+    @Query(value = "SELECT a.name, e.uri, COUNT(*) AS hits " +
             "FROM endpoint_hits e " +
+            "JOIN apps a ON e.app = a.id " +
             "WHERE e.act_time BETWEEN :start AND :end " +
             "AND (:uris IS NULL OR e.uri IN :uris) " +
-            "GROUP BY e.app, e.uri " +
+            "GROUP BY a.name, e.uri " +
             "ORDER BY hits DESC", nativeQuery = true)
     List<ViewStatsProjection> findAllStats(
             @Param("start") LocalDateTime start,
@@ -43,11 +46,12 @@ public interface StatsRepository extends org.springframework.data.jpa.repository
             @Param("uris") List<String> uris
     );
 
-    @Query(value = "SELECT app, uri, COUNT(DISTINCT e.ip) AS hits " +
+    @Query(value = "SELECT a.app, e.uri, COUNT(DISTINCT e.ip) AS hits " +
             "FROM endpoint_hits e " +
+            "JOIN apps a ON e.app = a.id " +
             "WHERE e.act_time BETWEEN :start AND :end " +
             "AND (:uris IS NULL OR e.uri IN :uris) " +
-            "GROUP BY e.app, e.uri " +
+            "GROUP BY a.name, e.uri " +
             "ORDER BY hits DESC", nativeQuery = true)
     List<ViewStatsProjection> findAllStatsUnique(
             @Param("start") LocalDateTime start,
