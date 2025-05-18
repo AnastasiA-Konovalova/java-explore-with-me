@@ -29,25 +29,15 @@ public class StatsServiceImpl implements StatsService {
         String appName = endpointHitDto.getApp();
         App app = appRepository.findByName(appName)
                 .orElseGet(() -> appRepository.save(new App(appName)));
-        //App app = appRepository.findOrCreateByName(appName);
-//        App app = appRepository.findByName(appName)
-//                .orElseThrow(() -> new IllegalArgumentException("Приложение с именем " + appName + " не найдено"));
         EndpointHit endpointHit = EndpointHitMapper.toEntity(endpointHitDto, app);
-        System.out.println(appName);
-        System.out.println(app);
         endpointHit.setApp(app);
-        // по имени app найти App
-        // endpointHit.set(app)
+
         statsRepository.save(endpointHit);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ViewStatsProjection> get(StatsRequestDto statsRequestDto) {
-//        if (start == null || end == null || start.isAfter(end)) {
-//            throw new IllegalArgumentException("Начало " + start + " и конец временного промежутка " + end + " должны " +
-//                    "быть указаны и быть в верной последовательности");
-//        }
         if (statsRequestDto.getUris() == null || statsRequestDto.getUris().isEmpty()) {
             if (statsRequestDto.getUnique()) {
                 return statsRepository.findAllNotUrisStatsUnique(statsRequestDto.getStart(), statsRequestDto.getEnd());

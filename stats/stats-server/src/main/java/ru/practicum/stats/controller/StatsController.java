@@ -34,10 +34,6 @@ public class StatsController {
         if (statsRequestDto.getStart().isAfter(statsRequestDto.getEnd())) {
             throw new IllegalArgumentException("Начало временного промежутка должно быть раньше его окончания");
         }
-        //@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-        // @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
-        // @RequestParam(required = false) List<String> uris,
-        // @RequestParam(required = false, defaultValue = "false") Boolean unique) {
         List<ViewStatsProjection> stats = statsService.get(statsRequestDto);
         return ResponseEntity.ok(stats).getBody();
     }

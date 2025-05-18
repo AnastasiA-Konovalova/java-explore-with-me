@@ -22,7 +22,7 @@ public class App {
     @Column(name = "name", nullable = false)
     private String name;
 
-    public App (String name) {
+    public App(String name) {
         this.name = name;
     }
 }

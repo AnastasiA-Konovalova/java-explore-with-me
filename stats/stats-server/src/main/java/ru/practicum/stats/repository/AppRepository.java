@@ -10,8 +10,4 @@ import java.util.Optional;
 public interface AppRepository extends JpaRepository<App, Integer> {
 
     Optional<App> findByName(String name);
-
-//    default App findOrCreateByName(String name) {
-//        return findByName(name).orElseGet(() -> save(new App(name)));
-//    }
 }
