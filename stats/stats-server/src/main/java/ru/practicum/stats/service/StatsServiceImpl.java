@@ -28,9 +28,13 @@ public class StatsServiceImpl implements StatsService {
     public void save(EndpointHitDto endpointHitDto) {
         String appName = endpointHitDto.getApp();
         App app = appRepository.findByName(appName)
-                .orElseThrow(() -> new IllegalArgumentException("Приложение с именем " + appName + " не найдено"));
+                .orElseGet(() -> appRepository.save(new App(appName)));
+        //App app = appRepository.findOrCreateByName(appName);
+//        App app = appRepository.findByName(appName)
+//                .orElseThrow(() -> new IllegalArgumentException("Приложение с именем " + appName + " не найдено"));
         EndpointHit endpointHit = EndpointHitMapper.toEntity(endpointHitDto, app);
-
+        System.out.println(appName);
+        System.out.println(app);
         endpointHit.setApp(app);
         // по имени app найти App
         // endpointHit.set(app)
@@ -44,7 +48,6 @@ public class StatsServiceImpl implements StatsService {
 //            throw new IllegalArgumentException("Начало " + start + " и конец временного промежутка " + end + " должны " +
 //                    "быть указаны и быть в верной последовательности");
 //        }
-
         if (statsRequestDto.getUris() == null || statsRequestDto.getUris().isEmpty()) {
             if (statsRequestDto.getUnique()) {
                 return statsRepository.findAllNotUrisStatsUnique(statsRequestDto.getStart(), statsRequestDto.getEnd());
