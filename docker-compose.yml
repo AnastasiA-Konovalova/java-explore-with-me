@@ -6,9 +6,9 @@ services:
     container_name: stats-db
     restart: always
     ports:
-      - "5432:5432"
+      - "25432:5432"
     volumes:
-      - ./stats/stats-server/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./stats/stats-server/src/main/resources/sсhema.sql:/docker-entrypoint-initdb.d/schema.sql
     environment:
       POSTGRES_DB: stats_db
       POSTGRES_USER: pgadmin
@@ -28,7 +28,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-     - ./ewm-service/ewm/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+     - ./ewm-service/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     environment:
       POSTGRES_DB: ewm_db
       POSTGRES_USER: pgadmin

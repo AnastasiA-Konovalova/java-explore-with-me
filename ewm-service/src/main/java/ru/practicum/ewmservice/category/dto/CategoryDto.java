@@ -1,7 +1,5 @@
 package ru.practicum.ewmservice.category.dto;
 
-import jakarta.persistence.Entity;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

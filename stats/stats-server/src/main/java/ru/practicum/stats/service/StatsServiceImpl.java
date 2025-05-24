@@ -31,8 +31,10 @@ public class StatsServiceImpl implements StatsService {
                 .orElseGet(() -> appRepository.save(new App(appName)));
         EndpointHit endpointHit = EndpointHitMapper.toEntity(endpointHitDto, app);
         endpointHit.setApp(app);
-
         statsRepository.save(endpointHit);
+        System.out.println(endpointHit.getApp());
+        String s = String.valueOf(appRepository.findByName(endpointHit.getApp().getName()));
+        System.out.println(s);
     }
 
     @Override

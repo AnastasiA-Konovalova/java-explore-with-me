@@ -7,5 +7,7 @@ public interface AdminCategoryService {
 
     CategoryDto saveNewCategory(NewCategoryDto newCategoryDto);
 
+    void deleteById(Integer id);
 
+    CategoryDto updateById(CategoryDto categoryDto, Integer catId);
 }
