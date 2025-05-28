@@ -6,7 +6,7 @@ services:
     container_name: stats-db
     restart: always
     ports:
-      - "25432:5432"
+      - "5432:5432"
     volumes:
       - ./stats/stats-server/src/main/resources/sсhema.sql:/docker-entrypoint-initdb.d/schema.sql
     environment:
