@@ -43,7 +43,7 @@ public class ErrorHandler {
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleCommonException(final Throwable e) {
-        log.error("Выброшено исключение,: {}", e.getMessage());
+        log.error("Выброшено исключение,: {}", e.getMessage(), e);
         return new ErrorResponse("Другая ошибка: ", e.getMessage());
     }
 }

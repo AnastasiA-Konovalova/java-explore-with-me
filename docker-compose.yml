@@ -6,11 +6,24 @@ services:
     container_name: stats-db
     restart: always
     ports:
-      - "5432:5432"
+      - "5434:5432"
     volumes:
       - ./stats/stats-server/src/main/resources/sсhema.sql:/docker-entrypoint-initdb.d/schema.sql
     environment:
       POSTGRES_DB: stats_db
+      POSTGRES_USER: pgadmin
+      POSTGRES_PASSWORD: pgadmin
+
+  ewm-db:
+    image: postgres:17
+    container_name: ewm-db
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./ewm-service/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    environment:
+      POSTGRES_DB: ewm_db
       POSTGRES_USER: pgadmin
       POSTGRES_PASSWORD: pgadmin
 
@@ -22,18 +35,6 @@ services:
     depends_on:
       - stats-db
 
-  ewm-db:
-    image: postgres:17
-    container_name: ewm-db
-    ports:
-      - "5433:5432"
-    volumes:
-     - ./ewm-service/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
-    environment:
-      POSTGRES_DB: ewm_db
-      POSTGRES_USER: pgadmin
-      POSTGRES_PASSWORD: pgadmin
-
   ewm-service:
     build: ./ewm-service
     container_name: ewm-service
@@ -41,5 +42,3 @@ services:
       - "8080:8080"
     depends_on:
       - ewm-db
-    environment:
-      SPRING_BOOT_DEBUG: true

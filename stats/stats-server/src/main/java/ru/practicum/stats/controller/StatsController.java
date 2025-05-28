@@ -3,7 +3,6 @@ package ru.practicum.stats.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,11 +29,8 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
+    @ResponseStatus(HttpStatus.OK)
     public List<ViewStatsProjection> getStats(@Valid @ModelAttribute StatsRequestDto statsRequestDto) {
-        if (statsRequestDto.getStart().isAfter(statsRequestDto.getEnd())) {
-            throw new IllegalArgumentException("Начало временного промежутка должно быть раньше его окончания");
-        }
-        List<ViewStatsProjection> stats = statsService.get(statsRequestDto);
-        return ResponseEntity.ok(stats).getBody();
+        return statsService.get(statsRequestDto);
     }
 }
