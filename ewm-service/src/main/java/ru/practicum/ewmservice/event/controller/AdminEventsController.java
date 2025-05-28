@@ -33,7 +33,6 @@ public class AdminEventsController {
                                              @RequestParam(required = false) String rangeEnd,
                                              @RequestParam(defaultValue = "0") Long from,
                                              @RequestParam(defaultValue = "10") Long size) {
-        System.out.println(states);
         return eventsService.getEventsByIds(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 

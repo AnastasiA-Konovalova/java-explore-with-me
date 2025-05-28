@@ -42,7 +42,6 @@ public class AdminEventsServiceImpl implements AdminEventsService {
 
         PageRequest pageRequest = PageRequest.of((int) (from / size), size.intValue());
         Page<Event> eventPage = eventsRepository.findAll(specification, pageRequest);
-        System.out.println(eventPage);
         if (eventPage.isEmpty()) {
             return List.of();
         }

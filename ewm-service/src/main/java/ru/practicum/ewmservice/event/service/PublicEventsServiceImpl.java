@@ -56,12 +56,6 @@ public class PublicEventsServiceImpl implements PublicEventsService {
         PageRequest pageRequest = PageRequest.of((int) (from / size), size.intValue(), sortBy);
         Page<Event> eventPage = eventsRepository.findAll(specification, pageRequest);
 
-//        List<String> uris = eventPage.getContent().stream()
-//                .map(event -> "/events" + event.getId())
-//                .toList();
-//
-//        List<ViewStatsDto> viewStatsDto = statsClient.get(statsR)
-
         return eventPage.getContent().stream()
                 .map(EventMapper::toShortDto)
                 .collect(Collectors.toList());

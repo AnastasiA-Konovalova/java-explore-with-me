@@ -22,6 +22,4 @@ public interface CategoriesRepository extends JpaRepository<Category, Long> {
     );
 
     Category findByName(String name);
-
-    //Boolean existsByNameAndIdNot(String name, Long id);
 }

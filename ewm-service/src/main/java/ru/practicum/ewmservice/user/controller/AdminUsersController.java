@@ -1,6 +1,5 @@
 package ru.practicum.ewmservice.user.controller;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,7 +29,6 @@ public class AdminUsersController {
     public List<UserDto> getUsersWithConditions(@RequestParam(required = false) List<Long> ids,
                                                 @RequestParam(defaultValue = "0") Long from,
                                                 @RequestParam(defaultValue = "10") Long size) {
-        System.out.println(">>> Вызван GET /admin/users");
         return usersService.getUsersWithConditions(ids, from, size);
     }
 
@@ -44,10 +42,5 @@ public class AdminUsersController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long userId) {
         usersService.delete(userId);
-    }
-
-    @PostConstruct
-    public void init() {
-        System.out.println(">>> Контроллер загружен");
     }
 }

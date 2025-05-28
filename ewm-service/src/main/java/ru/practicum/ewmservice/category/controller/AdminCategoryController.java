@@ -25,8 +25,6 @@ public class AdminCategoryController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto saveNewCategory(@Valid @RequestBody NewCategoryDto nawCategoryDto) {
-        // todo: unique in table
-        //todo: ошибки
         return categoryService.saveNewCategory(nawCategoryDto);
     }
 
@@ -40,8 +38,6 @@ public class AdminCategoryController {
     @ResponseStatus(HttpStatus.OK)
     public CategoryDto updateById(@Valid @RequestBody CategoryDto categoryDto,
                                   @PathVariable("catId") Long catId) {
-        // todo: unique in table
-        //todo: ошибки
         return categoryService.updateById(categoryDto, catId);
     }
 }

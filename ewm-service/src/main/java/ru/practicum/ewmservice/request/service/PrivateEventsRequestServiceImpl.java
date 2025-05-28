@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PrivateEventsRequestServiceImpl implements PrivateEventsRequestService {
 
-    private final PrivateEventsRepository eventsRepository;
     private final PrivateEventsRequestRepository eventsRequestRepository;
     private final AdminUsersService usersService;
     private final PrivateEventsService eventsService;
@@ -76,17 +75,8 @@ public class PrivateEventsRequestServiceImpl implements PrivateEventsRequestServ
         } else {
             request.setStatus(Status.PENDING);
         }
-
-//        if (request.getStatus().equals(Status.CONFIRMED)) {
-//            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
-//            privateEventsRepository.save(event);
-//        }
-
-
         Request saveRequest = eventsRequestRepository.save(request);
 
-        //нельзя добавить повторный запрос (Ожидается код ошибки 409)
-        // указала ограничение в таблице
         return EventRequestMapper.toDto(saveRequest);
     }
 
@@ -100,7 +90,6 @@ public class PrivateEventsRequestServiceImpl implements PrivateEventsRequestServ
         }
         request.setStatus(Status.CANCELED);
         Request update = eventsRequestRepository.save(request);
-        //eventsRequestRepository.deleteById(requestId);
 
         return EventRequestMapper.toDto(update);
     }

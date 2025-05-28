@@ -7,5 +7,4 @@ import ru.practicum.ewmservice.event.model.Event;
 
 @Repository
 public interface AdminEventsRepository extends JpaRepository<Event, Long>, JpaSpecificationExecutor<Event> {
-
 }

@@ -30,11 +30,4 @@ public class UserMapper {
         user.setName(userDto.getName());
         return user;
     }
-
-    public static User toShortEntity(UserShortDto userShortDto) {
-        User user = new User();
-        user.setId(userShortDto.getId());
-        user.setName(userShortDto.getName());
-        return user;
-    }
 }

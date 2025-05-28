@@ -20,7 +20,6 @@ import java.util.List;
 public class AdminCategoryServiceImpl implements AdminCategoryService {
 
     private final CategoriesRepository categoryRepository;
-    private final PublicCategoriesService categoriesService;
     private final PrivateEventsRepository eventsRepository;
 
     @Transactional
@@ -34,32 +33,24 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     }
 
     public void deleteById(Long id) {
-        categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Категория с id " + id + " не найдена."));
+        checkCategoryExists(id);
         List<Event> eventList = eventsRepository.findAllByCategoryId(id);
         if (!eventList.isEmpty()) {
-            throw new ConflictException("REW");
+            throw new ConflictException("Категория не должна быть связана с существующим событием.");
         }
-        //todo проверить что с категорией не связаны события
         categoryRepository.deleteById(id);
     }
 
     public CategoryDto updateById(CategoryDto categoryDto, Long catId) {
         Category category = checkCategoryUpdate(categoryDto, catId);
-
         Category categoryUpdate = CategoryMapper.toEntityCategoryUpdate(categoryDto, category);
 
         return CategoryMapper.toDto(categoryRepository.save(categoryUpdate));
     }
 
     private Category checkCategoryExists(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Категория с id " + id + " не найдена."));
-        //Category c = categoryRepository.findByName(category.getName());
-
-        Category existing = categoryRepository.findByName(category.getName());
-        if (existing != null && existing.getId().equals(id)) {
-            throw new ConflictException("Категория с именем " + category.getName() + " уже существует.");
-        }
-        return category;
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Категория с id " + id + " не найдена."));
     }
 
     private Category checkCategoryUpdate(CategoryDto categoryDto, Long id) {

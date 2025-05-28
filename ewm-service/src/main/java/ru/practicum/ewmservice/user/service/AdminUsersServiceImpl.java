@@ -52,13 +52,6 @@ public class AdminUsersServiceImpl implements AdminUsersService {
         if (user != null) {
             throw new ConflictException("Пользователь email " + userDto.getEmail() + " уже существует");
         }
-
-//        List<User> userList = usersRepository.findAll();
-//        boolean emailExists = userList.stream()
-//                .anyMatch(user -> userDto.getEmail().equals(user.getEmail()));
-//        if (emailExists) {
-//            throw new IllegalStateException("Пользователь email" + userDto.getEmail() + "уже существует");
-//        }
     }
 
     public User getUserById(Long userId) {

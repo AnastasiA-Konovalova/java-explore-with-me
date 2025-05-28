@@ -51,58 +51,6 @@ public class EventMapper {
         return eventFullDto;
     }
 
-    public static NewEventDtoRequest toNewEventDto(Event event) {
-        NewEventDtoRequest newEventDto = new NewEventDtoRequest();
-        newEventDto.setAnnotation(event.getAnnotation());
-        newEventDto.setCategory(event.getCategory().getId());
-        newEventDto.setDescription(event.getDescription());
-        newEventDto.setEventDate(String.valueOf(event.getEventDate()));
-        newEventDto.setLocation(event.getLocation());
-        newEventDto.setPaid(event.getPaid());
-        newEventDto.setParticipantLimit(event.getParticipantLimit());
-        newEventDto.setRequestModeration(event.getRequestModeration());
-        newEventDto.setTitle(event.getTitle());
-
-        return newEventDto;
-
-    }
-
-    public static Event toEntityForShort(EventShortDto eventShortDto) {
-        Event event = new Event();
-        event.setId(eventShortDto.getId());
-        event.setAnnotation(eventShortDto.getAnnotation());
-        event.setCategory(CategoryMapper.toEntityCategory(eventShortDto.getCategory()));
-        event.setPaid(eventShortDto.getPaid());
-        event.setTitle(eventShortDto.getTitle());
-        event.setConfirmedRequests(eventShortDto.getConfirmedRequests());
-        event.setEventDate(eventShortDto.getEventDate());
-        event.setInitiator(UserMapper.toShortEntity(eventShortDto.getInitiator()));
-        event.setViews(event.getViews());
-
-        return event;
-    }
-
-    public static Event toEntityForFull(EventFullDto eventFullDto) {
-        Event event = new Event();
-        event.setId(eventFullDto.getId());
-        event.setAnnotation(eventFullDto.getAnnotation());
-        event.setCategory(CategoryMapper.toEntityCategory(eventFullDto.getCategory()));
-        event.setConfirmedRequests(eventFullDto.getConfirmedRequests());
-        event.setCreatedOn(eventFullDto.getCreatedOn());
-        event.setEventDate(eventFullDto.getEventDate());
-        event.setInitiator(UserMapper.toShortEntity(eventFullDto.getInitiator()));
-        event.setLocation(eventFullDto.getLocation());
-        event.setPaid(eventFullDto.getPaid());
-        event.setParticipantLimit(eventFullDto.getParticipantLimit());
-        event.setPublishedOn(eventFullDto.getPublishedOn());
-        event.setRequestModeration(eventFullDto.getRequestModeration());
-        event.setState(eventFullDto.getState());
-        event.setTitle(eventFullDto.getTitle());
-        event.setViews(eventFullDto.getViews());
-
-        return event;
-    }
-
     public static Event toEntityForNewEvent(NewEventDtoRequest newEventDto, Category category, Long userId, Location location) {
         Event event = new Event();
         event.setAnnotation(newEventDto.getAnnotation());

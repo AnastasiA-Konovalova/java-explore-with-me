@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.ewmservice.category.mapper.CategoryMapper;
 import ru.practicum.ewmservice.category.model.Category;
-import ru.practicum.ewmservice.category.service.AdminCategoryService;
 import ru.practicum.ewmservice.category.service.PublicCategoriesService;
 import ru.practicum.ewmservice.event.dto.EventFullDto;
 import ru.practicum.ewmservice.event.dto.EventShortDto;
@@ -45,7 +44,6 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
     private final AdminUsersService usersService;
     private final LocationRepository locationRepository;
     private final PrivateEventsRequestRepository eventsRequestRepository;
-    private final AdminCategoryService adminCategoryService;
 
     public EventFullDto saveEvent(NewEventDtoRequest eventDtoRequest, Long userId) {
         if (LocalDateTime.parse(eventDtoRequest.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
@@ -66,9 +64,6 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
         event.setLocation(location);
         event.setState(State.PENDING);
         event.setInitiator(initiator);
-        System.out.println(event);
-        //todo добавить репозиторий локации
-        // мы должны вернуть полное дто, делать сетинг недостающих полей
 
         return EventMapper.toFullDto(eventsRepository.save(event));
     }
@@ -81,16 +76,14 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
         Category category = null;
         Location location = null;
         if (updateEvent.getCategory() != null) {
-            //Category category = categoriesService.getById(updateEvent.getCategory().getId());
             category = CategoryMapper.toEntityCategory(categoriesService.getById(updateEvent.getCategory().getId()));
         }
         if (updateEvent.getLocation() != null) {
             location = locationRepository.save(updateEvent.getLocation());
         }
-
         event = UpdateEventMapper.toEvent(updateEvent, event, category, location);
-
         Event updatedEvent = eventsRepository.save(event);
+
         return EventMapper.toFullDto(updatedEvent);
     }
 
@@ -140,31 +133,17 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
                 throw new ConflictException("Недопустимый статус: " + eventRequest.getStatus());
             }
         }
-
         eventsRepository.save(event);
         eventsRequestRepository.saveAll(requests);
 
-//        List<ParticipationRequestDto> confirmedDtoList = confirmed.stream()
-//                .map(EventRequestMapper::toDto)
-//                .toList();
-//
-//        List<ParticipationRequestDto> rejectedDtoList = rejectedRequests.stream()
-//                .map(requestMapper::toDto)
-//                .toList();
-
-        System.out.println("REQUEST " + requests.size());
-        System.out.println("CONFIRMED" + event.getConfirmedRequests());
-        System.out.println("LIMIT" + event.getParticipantLimit());
         return new EventRequestStatusUpdateResult(confirmed, rejected);
     }
-
 
     @Override
     public List<EventShortDto> getEventByUserId(Long userId, Long from, Long size) {
         usersService.getUserById(userId);
 
         PageRequest pageRequest = PageRequest.of((int) (from / size), size.intValue());
-        //List<Compilation>  = compilationsRepository.findAllByPinned(pinned, pageRequest).getContent();
 
         List<Event> events = eventsRepository.findAllByInitiatorId(userId, pageRequest).getContent();
         if (events.isEmpty()) {
@@ -177,8 +156,6 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
 
     @Override
     public EventFullDto getFullEventInfoByUserId(Long userId, Long eventId) {
-        //checkMainConditions(userId, eventId);
-
         return EventMapper.toFullDto(checkMainConditions(userId, eventId));
     }
 
@@ -186,13 +163,10 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
     public List<ParticipationRequestDto> getRequestForEventById(Long userId, Long eventId) {
         checkMainConditions(userId, eventId);
         List<Request> requests = eventsRequestRepository.findAllByEventId(eventId);
-        //Request request = eventsRequestRepository.findEventById()
 
         return requests.stream()
                 .map(EventRequestMapper::toDto)
                 .toList();
-        //todo доделать когда будет сервис запросов
-        //return null;
     }
 
     public Event getById(Long eventId) {

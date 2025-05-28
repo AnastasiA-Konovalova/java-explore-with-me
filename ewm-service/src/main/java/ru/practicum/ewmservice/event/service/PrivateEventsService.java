@@ -27,5 +27,4 @@ public interface PrivateEventsService {
     List<ParticipationRequestDto> getRequestForEventById(Long userId, Long eventId);
 
     Event getById(Long eventId);
-
 }

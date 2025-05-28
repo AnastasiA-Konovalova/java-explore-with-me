@@ -15,11 +15,9 @@ public interface PrivateEventsRequestRepository extends JpaRepository<Request, L
             "ORDER BY r.id", nativeQuery = true)
     List<Request> getByUserId(@Param("requesterId") Long userId);
 
-    boolean existsByRequesterIdAndEventId(Long userId, Long eventId);
-
     List<Request> findAllByEventId(Long eventId);
 
-    //Request findEventById();
+    boolean existsByRequesterIdAndEventId(Long userId, Long eventId);
 }
 
 

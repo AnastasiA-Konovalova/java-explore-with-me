@@ -33,21 +33,8 @@ public class CompilationMapper {
         return compilation;
     }
 
-//    public static CompilationDto toDtoUpdate(Compilation compilation) {
-//        CompilationDto compilationDto = new CompilationDto();
-//        compilationDto.setId(compilation.getId());
-//        compilationDto.setTitle(compilation.getTitle());
-//        compilationDto.setPinned(compilation.getPinned());
-//        compilationDto.setEvents(
-//                compilation.getEvents().stream()
-//                        .map(EventMapper::toShortDto)
-//                        .collect(Collectors.toList())
-//        );
-//        return compilationDto;
-//    }
-
-
-    public static Compilation toEntityUpdate(UpdateCompilationRequest compilationRequest, List<Event> events, Compilation compilation) {
+    public static Compilation toEntityUpdate(UpdateCompilationRequest compilationRequest,
+                                             List<Event> events, Compilation compilation) {
         if (compilationRequest.getEvents() != null && !events.isEmpty()) {
             compilation.setEvents(events);
         }

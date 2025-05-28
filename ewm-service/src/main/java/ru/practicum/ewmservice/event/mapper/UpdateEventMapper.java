@@ -1,11 +1,11 @@
 package ru.practicum.ewmservice.event.mapper;
 
 import ru.practicum.ewmservice.category.model.Category;
-import ru.practicum.ewmservice.event.model.UpdateEventUserRequest;
+import ru.practicum.ewmservice.event.enums.State;
 import ru.practicum.ewmservice.event.model.Event;
 import ru.practicum.ewmservice.event.model.Location;
-import ru.practicum.ewmservice.event.enums.State;
 import ru.practicum.ewmservice.event.model.UpdateEventAdminRequest;
+import ru.practicum.ewmservice.event.model.UpdateEventUserRequest;
 import ru.practicum.ewmservice.exception.ConflictException;
 
 import java.time.LocalDateTime;
