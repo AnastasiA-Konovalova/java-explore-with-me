@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.ewmservice.event.model.Location;
 
 @Repository
-public interface LocationRepository extends JpaRepository<Location, Integer> {
+public interface LocationRepository extends JpaRepository<Location, Long> {
 }

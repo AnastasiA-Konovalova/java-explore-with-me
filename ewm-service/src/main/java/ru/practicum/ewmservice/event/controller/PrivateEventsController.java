@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.ewmservice.event.dto.EventFullDto;
 import ru.practicum.ewmservice.event.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.ewmservice.event.dto.EventRequestStatusUpdateResult;
 import ru.practicum.ewmservice.event.dto.EventShortDto;
 import ru.practicum.ewmservice.event.dto.NewEventDtoRequest;
-import ru.practicum.ewmservice.event.dto.ParticipationRequestDto;
+import ru.practicum.ewmservice.request.dto.ParticipationRequestDto;
 import ru.practicum.ewmservice.event.dto.UpdateEventUserRequest;
 import ru.practicum.ewmservice.event.service.PrivateEventsService;
 
@@ -32,45 +33,46 @@ public class PrivateEventsController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto saveEvent(@Valid @RequestBody NewEventDtoRequest eventDtoRequest,
-                                  @PathVariable Integer userId) {
+                                  @PathVariable Long userId) {
         return eventsService.saveEvent(eventDtoRequest, userId);
     }
 
     @PatchMapping("{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto updateEvent(@RequestBody UpdateEventUserRequest updateEvent,
-                                    @PathVariable Integer userId,
-                                    @PathVariable(name = "eventId") Integer eventId) {
+    public EventFullDto updateEvent(@Valid @RequestBody UpdateEventUserRequest updateEvent,
+                                    @PathVariable Long userId,
+                                    @PathVariable(name = "eventId") Long eventId) {
         return eventsService.updateEvent(updateEvent, userId, eventId);
     }
 
     @PatchMapping("{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto updateEventRequests(@RequestBody EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest,
-                                            @PathVariable Integer userId,
-                                            @PathVariable(name = "eventId") Integer eventId) {
+    public EventRequestStatusUpdateResult updateEventRequests(@RequestBody EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest,
+                                                              @PathVariable Long userId,
+                                                              @PathVariable(name = "eventId") Long eventId) {
+        //todo доделать когда будет сервер с запросами
         return eventsService.updateEventRequests(eventRequestStatusUpdateRequest, userId, eventId);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventShortDto> getEventByUserId(@PathVariable Integer userId,
-                                               @RequestParam(defaultValue = "0") Integer from,
-                                               @RequestParam(defaultValue = "10") Integer size) {
+    public List<EventShortDto> getEventByUserId(@PathVariable Long userId,
+                                               @RequestParam(defaultValue = "0") Long from,
+                                               @RequestParam(defaultValue = "10") Long size) {
         return eventsService.getEventByUserId(userId, from, size);
     }
 
     @GetMapping("{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto getFullEventInfoByUserId(@PathVariable Integer userId,
-                                                 @PathVariable(name = "eventId") Integer eventId) {
+    public EventFullDto getFullEventInfoByUserId(@PathVariable Long userId,
+                                                 @PathVariable(name = "eventId") Long eventId) {
         return eventsService.getFullEventInfoByUserId(userId, eventId);
     }
 
     @GetMapping("{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public ParticipationRequestDto getRequestForEventById(@PathVariable Integer userId,
-                                                          @PathVariable(name = "eventId") Integer eventId) {
+    public List<ParticipationRequestDto> getRequestForEventById(@PathVariable Long userId,
+                                                          @PathVariable(name = "eventId") Long eventId) {
         return eventsService.getRequestForEventById(userId, eventId);
     }
 }

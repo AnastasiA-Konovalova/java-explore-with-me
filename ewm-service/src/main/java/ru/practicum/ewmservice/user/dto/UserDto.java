@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 public class UserDto {
 
-    private Integer id;
+    private Long id;
 
     @Email(message = "Неверный формат email")
     @NotBlank(message = "Email не должен быть пустым")

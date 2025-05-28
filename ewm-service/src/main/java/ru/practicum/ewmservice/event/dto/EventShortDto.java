@@ -21,16 +21,17 @@ import java.time.LocalDateTime;
 @Setter
 public class EventShortDto {
 
-    private Integer id;
+    private Long id;
 
     private String annotation;
 
     private CategoryDto category;
 
-    private Integer confirmedRequests;
+    private Long confirmedRequests;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private String eventDate;
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime eventDate;
 
     private UserShortDto initiator;
 
@@ -38,5 +39,5 @@ public class EventShortDto {
 
     private String title;
 
-    private Integer views;
+    private Long views;
 }

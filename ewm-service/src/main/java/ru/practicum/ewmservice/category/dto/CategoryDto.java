@@ -1,5 +1,6 @@
 package ru.practicum.ewmservice.category.dto;
 
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,9 +8,9 @@ import lombok.Setter;
 @Getter
 public class CategoryDto {
 
-    private Integer id;
+    private Long id;
 
     //todo:
-    //maxLength:50 minLength: 1
+    @Size(min = 1, max = 50)
     private String name;
 }

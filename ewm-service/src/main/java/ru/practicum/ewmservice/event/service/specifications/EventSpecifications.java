@@ -14,7 +14,7 @@ public class EventSpecifications {
 
     public static Specification<Event> filterEventConditionals(
             String text,
-            List<Integer> categories,
+            List<Long> categories,
             Boolean paid,
             String rangeStart,
             String rangeEnd,
@@ -54,6 +54,44 @@ public class EventSpecifications {
 
             if (onlyAvailable != null && onlyAvailable) {
                 predicates.add(criteriaBuilder.or(criteriaBuilder.isNull(root.get("participantLimit")), criteriaBuilder.greaterThan(root.get("participantLimit"), root.get("confirmedRequests"))));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+    public static Specification<Event> filterEventConditionalsForGetByIds(
+            List<Long> users,
+            List<String> states,
+            List<Long> categories,
+            String rangeStart,
+            String rangeEnd
+    ) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (users != null && !users.isEmpty()) {
+                predicates.add(root.get("initiator").get("id").in(users));
+            }
+
+            if (states != null && !states.isEmpty()) {
+                predicates.add(root.get("state").in(states));
+            }
+
+            if (categories != null && !categories.isEmpty()) {
+                predicates.add(root.get("category").get("id").in(categories));
+            }
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            if (rangeStart != null) {
+                LocalDateTime startDateTime = LocalDateTime.parse(rangeStart, formatter);
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("eventDate"), startDateTime));
+            }
+
+            if (rangeEnd != null) {
+                LocalDateTime endDateTime = LocalDateTime.parse(rangeEnd, formatter);
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("eventDate"), endDateTime));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

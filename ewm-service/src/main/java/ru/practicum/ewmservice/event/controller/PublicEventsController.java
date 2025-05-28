@@ -25,22 +25,22 @@ public class PublicEventsController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventShortDto> getEvents(@RequestParam String text,
-                                         @RequestParam List<Integer> categories,
+    public List<EventShortDto> getEvents(@RequestParam(required = false) String text,
+                                         @RequestParam List<Long> categories,
                                          @RequestParam Boolean paid,
-                                         @RequestParam String rangeStart,
-                                         @RequestParam String rangeEnd,
-                                         @RequestParam Boolean onlyAvailable,
-                                         @RequestParam String sort,
-                                         @RequestParam(defaultValue = "0") Integer from,
-                                         @RequestParam(defaultValue = "10") Integer size,
+                                         @RequestParam(required = false) String rangeStart,
+                                         @RequestParam(required = false) String rangeEnd,
+                                         @RequestParam(required = false) Boolean onlyAvailable,
+                                         @RequestParam(required = false) String sort,
+                                         @RequestParam(defaultValue = "0") Long from,
+                                         @RequestParam(defaultValue = "10") Long size,
                                          HttpServletRequest request) {
         return eventsService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size, request);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto getById(@PathVariable(name = "id") Integer id, HttpServletRequest request) {
+    public EventFullDto getById(@PathVariable(name = "id") Long id, HttpServletRequest request) {
         return eventsService.getById(id, request);
     }
 }

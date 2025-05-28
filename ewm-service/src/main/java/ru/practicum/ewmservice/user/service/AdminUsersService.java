@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface AdminUsersService {
 
-    List<UserDto> getUsersWithConditions(List<Integer> ids, Integer from, Integer size);
+    List<UserDto> getUsersWithConditions(List<Long> ids, Long from, Long size);
 
     UserDto saveUser(UserDto userDto);
 
-    void delete(Integer userId);
+    void delete(Long userId);
 
-    User getUserById(Integer userId);
+    User getUserById(Long userId);
 }

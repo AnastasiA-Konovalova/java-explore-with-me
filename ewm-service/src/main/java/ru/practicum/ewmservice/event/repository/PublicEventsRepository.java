@@ -12,7 +12,7 @@ import ru.practicum.ewmservice.user.model.User;
 import java.util.List;
 
 @Repository
-public interface PublicEventsRepository extends JpaRepository<Event, Integer>, JpaSpecificationExecutor<Event> {
+public interface PublicEventsRepository extends JpaRepository<Event, Long>, JpaSpecificationExecutor<Event> {
 
 //    @Query(value = "SELECT e.annotation, e.description, " +
 //            "FROM events e " +

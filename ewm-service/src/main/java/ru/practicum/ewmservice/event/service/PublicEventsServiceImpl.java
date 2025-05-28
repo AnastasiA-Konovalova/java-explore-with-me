@@ -16,9 +16,11 @@ import ru.practicum.ewmservice.event.model.State;
 import ru.practicum.ewmservice.event.repository.PublicEventsRepository;
 import ru.practicum.ewmservice.event.service.specifications.EventSpecifications;
 import ru.practicum.ewmservice.exception.NotFoundException;
+import ru.practicum.ewmservice.exception.ValidationException;
 import ru.practicum.stats.StatsClient;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,9 +32,17 @@ public class PublicEventsServiceImpl implements PublicEventsService {
     private final StatsClient statsClient;
 
     @Override
-    public List<EventShortDto> getEvents(String text, List<Integer> categories, Boolean paid, String rangeStart,
+    public List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid, String rangeStart,
                                          String rangeEnd, Boolean onlyAvailable, String sort,
-                                         Integer from, Integer size, HttpServletRequest request) {
+                                         Long from, Long size, HttpServletRequest request) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (rangeStart != null && rangeEnd != null) {
+            LocalDateTime start = LocalDateTime.parse(rangeStart, formatter);
+            LocalDateTime end = LocalDateTime.parse(rangeEnd, formatter);
+            if (start.isAfter(end)) {
+                throw new ValidationException("rangeStart не может быть позже rangeEnd");
+            }
+        }
         Specification<Event> specification = EventSpecifications.filterEventConditionals(text, categories, paid, rangeStart, rangeEnd, onlyAvailable);
         Sort sortBy = Sort.unsorted();
         if ("event_date".equalsIgnoreCase(sort)) {
@@ -43,7 +53,7 @@ public class PublicEventsServiceImpl implements PublicEventsService {
 
         saveStats(request);
 
-        PageRequest pageRequest = PageRequest.of(from / size, size, sortBy);
+        PageRequest pageRequest = PageRequest.of((int) (from / size), size.intValue(), sortBy);
         Page<Event> eventPage = eventsRepository.findAll(specification, pageRequest);
 
 //        List<String> uris = eventPage.getContent().stream()
@@ -57,7 +67,7 @@ public class PublicEventsServiceImpl implements PublicEventsService {
                 .collect(Collectors.toList());
     }
 
-    public EventFullDto getById(Integer id, HttpServletRequest request) {
+    public EventFullDto getById(Long id, HttpServletRequest request) {
         Event event = eventsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Событие с id " + id + " не найдено."));
 

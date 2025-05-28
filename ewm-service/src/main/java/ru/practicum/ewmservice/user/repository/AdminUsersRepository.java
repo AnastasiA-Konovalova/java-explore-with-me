@@ -10,7 +10,7 @@ import ru.practicum.ewmservice.user.model.User;
 import java.util.List;
 
 @Repository
-public interface AdminUsersRepository extends JpaRepository<User, Integer> {
+public interface AdminUsersRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * " +
             "FROM users u " +
@@ -19,17 +19,18 @@ public interface AdminUsersRepository extends JpaRepository<User, Integer> {
             "LIMIT :size " +
             "OFFSET :from", nativeQuery = true)
     List<User> getUsersByIdsWithSizeAndSkipFrom(
-            @Param("ids") List<Integer> ids,
-            @Param("from") Integer from,
-            @Param("size") Integer size
+            @Param("ids") List<Long> ids,
+            @Param("from") Long from,
+            @Param("size") Long size
     );
 
-    @Query(value = "SELECT * FROM users ORDER BY id LIMIT :size OFFSET :from", nativeQuery = true)
+    @Query(value = "SELECT * " +
+            "FROM users " +
+            "ORDER BY id " +
+            "LIMIT :size " +
+            "OFFSET :from", nativeQuery = true)
     List<User> findAllWithPagination(
-            @Param("from") Integer from,
-            @Param("size") Integer size
+            @Param("from") Long from,
+            @Param("size") Long size
     );
-
-
-    //String getUserByEmail();
 }

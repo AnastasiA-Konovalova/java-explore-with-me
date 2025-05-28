@@ -22,14 +22,14 @@ public class PublicCategoriesController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CategoryDto> get(@RequestParam(defaultValue = "0") Integer from,
-                                 @RequestParam(defaultValue = "10") Integer size) {
+    public List<CategoryDto> get(@RequestParam(defaultValue = "0") Long from,
+                                 @RequestParam(defaultValue = "10") Long size) {
         return publicCategoriesService.get(from, size);
     }
 
     @GetMapping("/{catId}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDto getById(@PathVariable(name = "catId") Integer catId) {
+    public CategoryDto getById(@PathVariable(name = "catId") Long catId) {
         return publicCategoriesService.getById(catId);
     }
 }

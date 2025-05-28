@@ -21,9 +21,16 @@ public class CategoryMapper {
         return category;
     }
 
-    public static Category toEntityCategoryUpdate(CategoryDto categoryDto) {
+    public static Category toEntityCategory(CategoryDto categoryDto) {
         Category category = new Category();
         category.setId(categoryDto.getId());
+        category.setName(categoryDto.getName());
+
+        return category;
+    }
+
+    public static Category toEntityCategoryUpdate(CategoryDto categoryDto, Category category) {
+        //category.setId(categoryDto.getId());
         category.setName(categoryDto.getName());
 
         return category;

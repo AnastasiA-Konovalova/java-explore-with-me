@@ -7,7 +7,7 @@ import ru.practicum.stats.model.App;
 import java.util.Optional;
 
 @Repository
-public interface AppRepository extends JpaRepository<App, Integer> {
+public interface AppRepository extends JpaRepository<App, Long> {
 
     Optional<App> findByName(String name);
 }

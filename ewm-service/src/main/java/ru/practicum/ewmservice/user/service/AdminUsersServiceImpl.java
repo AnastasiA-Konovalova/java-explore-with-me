@@ -19,7 +19,7 @@ public class AdminUsersServiceImpl implements AdminUsersService {
 
 
     @Override
-    public List<UserDto> getUsersWithConditions(List<Integer> ids, Integer from, Integer size) {
+    public List<UserDto> getUsersWithConditions(List<Long> ids, Long from, Long size) {
         List<User> users;
         if (ids == null || ids.isEmpty()) {
             users = userRepository.findAllWithPagination(from, size);
@@ -38,15 +38,12 @@ public class AdminUsersServiceImpl implements AdminUsersService {
     @Override
     public UserDto saveUser(UserDto userDto) {
         //uniqueEmailValidate(userDto);
-        System.out.println(userDto.getName());
-
         User user = UserMapper.toEntity(userDto);
-        System.out.println(user);
         return UserMapper.toDto(userRepository.save(user));
     }
 
     @Override
-    public void delete(Integer userId) {
+    public void delete(Long userId) {
         getUserById(userId);
         userRepository.deleteById(userId);
     }
@@ -65,7 +62,7 @@ public class AdminUsersServiceImpl implements AdminUsersService {
 //        }
     }
 
-    public User getUserById(Integer userId) {
+    public User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователя с таким id " + userId + " не существует."));
     }

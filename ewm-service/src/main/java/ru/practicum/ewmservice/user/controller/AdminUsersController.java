@@ -27,9 +27,9 @@ public class AdminUsersController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> getUsersWithConditions(@RequestParam(required = false) List<Integer> ids,
-                                                @RequestParam(defaultValue = "0") Integer from,
-                                                @RequestParam(defaultValue = "10") Integer size) {
+    public List<UserDto> getUsersWithConditions(@RequestParam(required = false) List<Long> ids,
+                                                @RequestParam(defaultValue = "0") Long from,
+                                                @RequestParam(defaultValue = "10") Long size) {
         System.out.println(">>> Вызван GET /admin/users");
         return usersService.getUsersWithConditions(ids, from, size);
     }
@@ -42,7 +42,7 @@ public class AdminUsersController {
 
     @DeleteMapping("{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Integer userId) {
+    public void delete(@PathVariable Long userId) {
         usersService.delete(userId);
     }
 

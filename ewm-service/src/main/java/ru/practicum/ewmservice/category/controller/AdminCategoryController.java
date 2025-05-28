@@ -32,14 +32,14 @@ public class AdminCategoryController {
 
     @DeleteMapping("/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable(name = "catId") Integer id) {
+    public void deleteById(@PathVariable(name = "catId") Long id) {
         categoryService.deleteById(id);
     }
 
     @PatchMapping("/{catId}")
     @ResponseStatus(HttpStatus.OK)
     public CategoryDto updateById(@Valid @RequestBody CategoryDto categoryDto,
-                                  @PathVariable("catId") Integer catId) {
+                                  @PathVariable("catId") Long catId) {
         // todo: unique in table
         //todo: ошибки
         return categoryService.updateById(categoryDto, catId);

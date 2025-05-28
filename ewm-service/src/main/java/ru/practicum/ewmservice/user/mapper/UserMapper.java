@@ -1,8 +1,5 @@
 package ru.practicum.ewmservice.user.mapper;
 
-import ru.practicum.ewmservice.category.dto.CategoryDto;
-import ru.practicum.ewmservice.category.dto.NewCategoryDto;
-import ru.practicum.ewmservice.category.model.Category;
 import ru.practicum.ewmservice.user.dto.UserDto;
 import ru.practicum.ewmservice.user.dto.UserShortDto;
 import ru.practicum.ewmservice.user.model.User;

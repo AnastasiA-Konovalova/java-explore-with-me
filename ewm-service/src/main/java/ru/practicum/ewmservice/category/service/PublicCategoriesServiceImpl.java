@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.ewmservice.category.model.Category;
 import ru.practicum.ewmservice.category.dto.CategoryDto;
 import ru.practicum.ewmservice.category.mapper.CategoryMapper;
-import ru.practicum.ewmservice.category.repository.PublicCategoriesRepository;
+import ru.practicum.ewmservice.category.repository.CategoriesRepository;
 import ru.practicum.ewmservice.exception.NotFoundException;
 
 import java.util.List;
@@ -14,9 +14,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PublicCategoriesServiceImpl implements PublicCategoriesService {
 
-    private final PublicCategoriesRepository categoriesRepository;
+    private final CategoriesRepository categoriesRepository;
 
-    public List<CategoryDto> get(Integer from, Integer size) {
+    public List<CategoryDto> get(Long from, Long size) {
         List<Category> categories = categoriesRepository.getNameWithSizeAndSkipFrom(from, size);
         if (categories.isEmpty()) {
             return List.of();
@@ -26,7 +26,7 @@ public class PublicCategoriesServiceImpl implements PublicCategoriesService {
                 .toList();
     }
 
-    public CategoryDto getById(Integer catId) {
+    public CategoryDto getById(Long catId) {
         Category category = categoriesRepository.findById(catId)
                 .orElseThrow(() -> new NotFoundException("Категория с id " + catId + " не найдена."));
 

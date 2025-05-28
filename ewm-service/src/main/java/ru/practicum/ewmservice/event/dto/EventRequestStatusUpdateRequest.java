@@ -10,7 +10,8 @@ import java.util.List;
 @Setter
 public class EventRequestStatusUpdateRequest {
 
-    private List<Integer> requestIds;
+
+    private List<Long> requestIds;
 
     private Status status;
 }

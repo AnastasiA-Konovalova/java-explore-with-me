@@ -7,14 +7,15 @@ import ru.practicum.ewmservice.category.model.Category;
 import ru.practicum.ewmservice.category.dto.CategoryDto;
 import ru.practicum.ewmservice.category.dto.NewCategoryDto;
 import ru.practicum.ewmservice.category.mapper.CategoryMapper;
-import ru.practicum.ewmservice.category.repository.AdminCategoryRepository;
+import ru.practicum.ewmservice.category.repository.CategoriesRepository;
 import ru.practicum.ewmservice.exception.NotFoundException;
 
 @Service
 @RequiredArgsConstructor
 public class AdminCategoryServiceImpl implements AdminCategoryService {
 
-    private final AdminCategoryRepository categoryRepository;
+    private final CategoriesRepository categoryRepository;
+    private final PublicCategoriesService categoriesService;
 
     @Transactional
     public CategoryDto saveNewCategory(NewCategoryDto newCategoryDto) {
@@ -22,24 +23,23 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         return CategoryMapper.toDto(categoryRepository.save(category));
     }
 
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         checkCategoryExists(id);
         //todo проверить что с категорией не связаны события
-
+        System.out.println(id);
         categoryRepository.deleteById(id);
     }
 
-    public CategoryDto updateById(CategoryDto categoryDto, Integer catId) {
-        checkCategoryExists(catId);
-        Category category = CategoryMapper.toEntityCategoryUpdate(categoryDto);
+    public CategoryDto updateById(CategoryDto categoryDto, Long catId) {
+        Category category = checkCategoryExists(catId);
 
-        return CategoryMapper.toDto(categoryRepository.save(category));
+        Category categoryUpdate = CategoryMapper.toEntityCategoryUpdate(categoryDto, category);
+
+        return CategoryMapper.toDto(categoryRepository.save(categoryUpdate));
     }
 
-    private void checkCategoryExists(Integer id) {
-        if (!categoryRepository.existsById(id)) {
-            throw new NotFoundException("Категория с id " + id + " не найдена.");
-        }
+    private Category checkCategoryExists(Long id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Категория с id " + id + " не найдена."));
     }
 
 }

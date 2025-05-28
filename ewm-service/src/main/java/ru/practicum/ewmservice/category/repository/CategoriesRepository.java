@@ -9,7 +9,7 @@ import ru.practicum.ewmservice.category.model.Category;
 import java.util.List;
 
 @Repository
-public interface PublicCategoriesRepository extends JpaRepository<Category, Integer> {
+public interface CategoriesRepository extends JpaRepository<Category, Long> {
 
     @Query(value = "SELECT c.id, c.name " +
             "FROM categories c " +
@@ -17,7 +17,7 @@ public interface PublicCategoriesRepository extends JpaRepository<Category, Inte
             "LIMIT :size " +
             "OFFSET :from", nativeQuery = true)
     List<Category> getNameWithSizeAndSkipFrom(
-            @Param("from") Integer from,
-            @Param("size") Integer size
+            @Param("from") Long from,
+            @Param("size") Long size
     );
 }

@@ -2,7 +2,9 @@ package ru.practicum.ewmservice.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,12 +16,14 @@ import java.time.LocalDateTime;
 @Setter
 public class NewEventDtoRequest {
 
+    @NotBlank
     @Size(min = 20, max = 2000, message = "Длина аннотации должна быть от 20 до 2000")
     private String annotation;
 
     @NotNull
-    private Integer category;
+    private Long category;
 
+    @NotBlank
     @Size(min = 20, max = 7000, message = "Длина описания должна быть от 20 до 7000")
     private String description;
 
@@ -33,8 +37,9 @@ public class NewEventDtoRequest {
     @JsonProperty(defaultValue = "false")
     private Boolean paid;
 
+    @Positive
     @JsonProperty(defaultValue = "0")
-    private Integer participantLimit;
+    private Long participantLimit;
 
     @JsonProperty(defaultValue = "true")
     private Boolean requestModeration;
