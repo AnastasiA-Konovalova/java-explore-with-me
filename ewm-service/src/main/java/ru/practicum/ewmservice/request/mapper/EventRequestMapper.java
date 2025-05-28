@@ -15,5 +15,4 @@ public class EventRequestMapper {
 
         return requestDto;
     }
-
 }

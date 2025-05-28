@@ -10,7 +10,6 @@ public class CategoryDto {
 
     private Long id;
 
-    //todo:
     @Size(min = 1, max = 50)
     private String name;
 }

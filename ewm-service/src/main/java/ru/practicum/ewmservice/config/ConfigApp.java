@@ -4,7 +4,6 @@ package ru.practicum.ewmservice.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
-import ru.practicum.stats.StatsClient;
 
 @Configuration
 public class ConfigApp {

@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.ewmservice.event.dto.EventFullDto;
 import ru.practicum.ewmservice.event.dto.EventShortDto;
+import ru.practicum.ewmservice.event.enums.State;
 import ru.practicum.ewmservice.event.mapper.EventMapper;
 import ru.practicum.ewmservice.event.model.Event;
-import ru.practicum.ewmservice.event.model.State;
 import ru.practicum.ewmservice.event.repository.PublicEventsRepository;
 import ru.practicum.ewmservice.event.service.specifications.EventSpecifications;
 import ru.practicum.ewmservice.exception.NotFoundException;
@@ -75,7 +75,11 @@ public class PublicEventsServiceImpl implements PublicEventsService {
             throw new NotFoundException("Событие с id " + id + " не опубликовано");
         }
         saveStats(request);
-
+        if (event.getViews() == null) {
+            event.setViews(1L);
+        } else {
+            event.setViews(event.getViews() + 1);
+        }
         return EventMapper.toFullDto(event);
     }
 

@@ -27,12 +27,13 @@ public class AdminEventsController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getEventsByIds(@RequestParam(required = false) List<Long> users,
-                                  @RequestParam(required = false) List<String> states,
-                                  @RequestParam(required = false) List<Long> categories,
-                                  @RequestParam(required = false) String rangeStart,
-                                  @RequestParam(required = false) String rangeEnd,
-                                  @RequestParam(defaultValue = "0") Long from,
-                                  @RequestParam(defaultValue = "10") Long size) {
+                                             @RequestParam(required = false) List<String> states,
+                                             @RequestParam(required = false) List<Long> categories,
+                                             @RequestParam(required = false) String rangeStart,
+                                             @RequestParam(required = false) String rangeEnd,
+                                             @RequestParam(defaultValue = "0") Long from,
+                                             @RequestParam(defaultValue = "10") Long size) {
+        System.out.println(states);
         return eventsService.getEventsByIds(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 

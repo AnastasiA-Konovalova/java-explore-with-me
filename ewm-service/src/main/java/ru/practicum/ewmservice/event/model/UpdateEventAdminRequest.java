@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.ewmservice.category.dto.CategoryDto;
+import ru.practicum.ewmservice.event.enums.StateAction;
 
 @Getter
 @Setter

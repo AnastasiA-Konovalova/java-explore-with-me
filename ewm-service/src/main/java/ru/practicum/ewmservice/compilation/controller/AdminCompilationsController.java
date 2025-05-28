@@ -15,7 +15,6 @@ import ru.practicum.ewmservice.compilation.dto.CompilationDto;
 import ru.practicum.ewmservice.compilation.dto.NewCompilationDto;
 import ru.practicum.ewmservice.compilation.dto.UpdateCompilationRequest;
 import ru.practicum.ewmservice.compilation.service.AdminCompilationsService;
-import ru.practicum.ewmservice.event.service.AdminEventsService;
 
 @RestController
 @RequiredArgsConstructor

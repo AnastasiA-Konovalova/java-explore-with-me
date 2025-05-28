@@ -2,9 +2,9 @@ package ru.practicum.ewmservice.category.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.ewmservice.category.model.Category;
 import ru.practicum.ewmservice.category.dto.CategoryDto;
 import ru.practicum.ewmservice.category.mapper.CategoryMapper;
+import ru.practicum.ewmservice.category.model.Category;
 import ru.practicum.ewmservice.category.repository.CategoriesRepository;
 import ru.practicum.ewmservice.exception.NotFoundException;
 
@@ -32,5 +32,4 @@ public class PublicCategoriesServiceImpl implements PublicCategoriesService {
 
         return CategoryMapper.toDto(category);
     }
-
 }

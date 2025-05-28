@@ -10,8 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.practicum.ewmservice.event.model.Location;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 public class NewEventDtoRequest {
@@ -28,7 +26,6 @@ public class NewEventDtoRequest {
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    @NotBlank
     private String eventDate;
 
     @NotNull

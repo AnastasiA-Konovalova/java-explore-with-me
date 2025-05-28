@@ -2,8 +2,8 @@ package ru.practicum.ewmservice.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.ewmservice.exception.ConflictException;
 import ru.practicum.ewmservice.exception.NotFoundException;
-import ru.practicum.ewmservice.exception.ValidationException;
 import ru.practicum.ewmservice.user.dto.UserDto;
 import ru.practicum.ewmservice.user.mapper.UserMapper;
 import ru.practicum.ewmservice.user.model.User;
@@ -16,7 +16,6 @@ import java.util.List;
 public class AdminUsersServiceImpl implements AdminUsersService {
 
     private final AdminUsersRepository userRepository;
-
 
     @Override
     public List<UserDto> getUsersWithConditions(List<Long> ids, Long from, Long size) {
@@ -37,7 +36,7 @@ public class AdminUsersServiceImpl implements AdminUsersService {
 
     @Override
     public UserDto saveUser(UserDto userDto) {
-        //uniqueEmailValidate(userDto);
+        uniqueEmailValidate(userDto);
         User user = UserMapper.toEntity(userDto);
         return UserMapper.toDto(userRepository.save(user));
     }
@@ -48,11 +47,11 @@ public class AdminUsersServiceImpl implements AdminUsersService {
         userRepository.deleteById(userId);
     }
 
-
     private void uniqueEmailValidate(UserDto userDto) {
-//        if (!usersRepository.getUserByEmail(userDto.getEmail()).isEmpty()) {
-//            throw new ValidationException("Пользователь email " + userDto.getEmail() + " уже существует");
-//        }
+        User user = userRepository.findByEmail(userDto.getEmail());
+        if (user != null) {
+            throw new ConflictException("Пользователь email " + userDto.getEmail() + " уже существует");
+        }
 
 //        List<User> userList = usersRepository.findAll();
 //        boolean emailExists = userList.stream()

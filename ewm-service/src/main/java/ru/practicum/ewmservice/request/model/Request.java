@@ -14,8 +14,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import ru.practicum.ewmservice.event.enums.Status;
 import ru.practicum.ewmservice.event.model.Event;
-import ru.practicum.ewmservice.event.model.Status;
 import ru.practicum.ewmservice.user.model.User;
 
 import java.time.LocalDateTime;
@@ -31,7 +31,7 @@ public class Request {
     private Long id;
 
     @Column(name = "created", nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime created;
 
     @ManyToOne

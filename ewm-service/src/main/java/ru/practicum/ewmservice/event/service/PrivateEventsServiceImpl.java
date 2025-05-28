@@ -1,6 +1,5 @@
 package ru.practicum.ewmservice.event.service;
 
-import exeptions.InternalServerException;
 import exeptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -9,35 +8,32 @@ import ru.practicum.ewmservice.category.mapper.CategoryMapper;
 import ru.practicum.ewmservice.category.model.Category;
 import ru.practicum.ewmservice.category.service.AdminCategoryService;
 import ru.practicum.ewmservice.category.service.PublicCategoriesService;
-import ru.practicum.ewmservice.compilation.model.Compilation;
 import ru.practicum.ewmservice.event.dto.EventFullDto;
-import ru.practicum.ewmservice.event.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.ewmservice.event.dto.EventRequestStatusUpdateResult;
 import ru.practicum.ewmservice.event.dto.EventShortDto;
 import ru.practicum.ewmservice.event.dto.NewEventDtoRequest;
-import ru.practicum.ewmservice.event.model.Status;
-import ru.practicum.ewmservice.request.dto.ParticipationRequestDto;
-import ru.practicum.ewmservice.event.dto.UpdateEventUserRequest;
+import ru.practicum.ewmservice.event.enums.State;
+import ru.practicum.ewmservice.event.enums.Status;
 import ru.practicum.ewmservice.event.mapper.EventMapper;
 import ru.practicum.ewmservice.event.mapper.UpdateEventMapper;
 import ru.practicum.ewmservice.event.model.Event;
+import ru.practicum.ewmservice.event.model.EventRequestStatusUpdateRequest;
+import ru.practicum.ewmservice.event.model.EventRequestStatusUpdateResult;
 import ru.practicum.ewmservice.event.model.Location;
-import ru.practicum.ewmservice.event.model.State;
+import ru.practicum.ewmservice.event.model.UpdateEventUserRequest;
 import ru.practicum.ewmservice.event.repository.LocationRepository;
 import ru.practicum.ewmservice.event.repository.PrivateEventsRepository;
 import ru.practicum.ewmservice.exception.ConflictException;
 import ru.practicum.ewmservice.exception.ValidationException;
+import ru.practicum.ewmservice.request.dto.ParticipationRequestDto;
 import ru.practicum.ewmservice.request.mapper.EventRequestMapper;
 import ru.practicum.ewmservice.request.model.Request;
 import ru.practicum.ewmservice.request.repository.PrivateEventsRequestRepository;
-import ru.practicum.ewmservice.request.service.PrivateEventsRequestService;
 import ru.practicum.ewmservice.user.model.User;
 import ru.practicum.ewmservice.user.service.AdminUsersService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -110,6 +106,14 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
             return new EventRequestStatusUpdateResult(List.of(), List.of());
         }
 
+        List<Request> allByEventId = eventsRequestRepository.findAllByEventId(eventId);
+        List<Request> list = allByEventId.stream()
+                .filter(request -> request.getStatus().equals(Status.CONFIRMED))
+                .toList();
+        if (list.size() == event.getParticipantLimit()) {
+            throw new ConflictException("Нельзя подтвердить заявку, если уже достигнут лимит по заявкам на данное событие.");
+        }
+
         List<Request> requests = eventsRequestRepository.findAllById(eventRequest.getRequestIds());
 
         List<ParticipationRequestDto> confirmed = new ArrayList<>();
@@ -137,9 +141,20 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
             }
         }
 
-        eventsRequestRepository.saveAll(requests);
         eventsRepository.save(event);
+        eventsRequestRepository.saveAll(requests);
 
+//        List<ParticipationRequestDto> confirmedDtoList = confirmed.stream()
+//                .map(EventRequestMapper::toDto)
+//                .toList();
+//
+//        List<ParticipationRequestDto> rejectedDtoList = rejectedRequests.stream()
+//                .map(requestMapper::toDto)
+//                .toList();
+
+        System.out.println("REQUEST " + requests.size());
+        System.out.println("CONFIRMED" + event.getConfirmedRequests());
+        System.out.println("LIMIT" + event.getParticipantLimit());
         return new EventRequestStatusUpdateResult(confirmed, rejected);
     }
 
@@ -211,5 +226,4 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
                     "Событие не может начаться раньше чем через два часа от публикации и раньше чем текущее время.");
         }
     }
-
 }

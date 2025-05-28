@@ -1,4 +1,4 @@
-package ru.practicum.ewmservice.event.model;
+package ru.practicum.ewmservice.event.enums;
 
 public enum Status {
     CONFIRMED,

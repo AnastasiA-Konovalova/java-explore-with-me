@@ -41,5 +41,4 @@ public class PrivateEventRequestsController {
                                                        @PathVariable Long requestId) {
         return eventsRequestService.updateCancelRequest(userId, requestId);
     }
-
 }

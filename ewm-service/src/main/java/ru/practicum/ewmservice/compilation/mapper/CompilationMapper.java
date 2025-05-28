@@ -1,11 +1,9 @@
 package ru.practicum.ewmservice.compilation.mapper;
 
 import ru.practicum.ewmservice.compilation.dto.CompilationDto;
-import ru.practicum.ewmservice.compilation.dto.EventInCompilationDto;
 import ru.practicum.ewmservice.compilation.dto.NewCompilationDto;
 import ru.practicum.ewmservice.compilation.dto.UpdateCompilationRequest;
 import ru.practicum.ewmservice.compilation.model.Compilation;
-import ru.practicum.ewmservice.event.dto.EventShortDto;
 import ru.practicum.ewmservice.event.mapper.EventMapper;
 import ru.practicum.ewmservice.event.model.Event;
 

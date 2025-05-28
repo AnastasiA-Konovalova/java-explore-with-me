@@ -20,4 +20,8 @@ public interface CategoriesRepository extends JpaRepository<Category, Long> {
             @Param("from") Long from,
             @Param("size") Long size
     );
+
+    Category findByName(String name);
+
+    //Boolean existsByNameAndIdNot(String name, Long id);
 }

@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.ewmservice.event.dto.EventFullDto;
-import ru.practicum.ewmservice.event.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.ewmservice.event.dto.EventRequestStatusUpdateResult;
+import ru.practicum.ewmservice.event.model.EventRequestStatusUpdateRequest;
+import ru.practicum.ewmservice.event.model.EventRequestStatusUpdateResult;
 import ru.practicum.ewmservice.event.dto.EventShortDto;
 import ru.practicum.ewmservice.event.dto.NewEventDtoRequest;
-import ru.practicum.ewmservice.request.dto.ParticipationRequestDto;
-import ru.practicum.ewmservice.event.dto.UpdateEventUserRequest;
+import ru.practicum.ewmservice.event.model.UpdateEventUserRequest;
 import ru.practicum.ewmservice.event.service.PrivateEventsService;
+import ru.practicum.ewmservice.request.dto.ParticipationRequestDto;
 
 import java.util.List;
 
@@ -57,8 +57,8 @@ public class PrivateEventsController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventShortDto> getEventByUserId(@PathVariable Long userId,
-                                               @RequestParam(defaultValue = "0") Long from,
-                                               @RequestParam(defaultValue = "10") Long size) {
+                                                @RequestParam(defaultValue = "0") Long from,
+                                                @RequestParam(defaultValue = "10") Long size) {
         return eventsService.getEventByUserId(userId, from, size);
     }
 
@@ -72,7 +72,7 @@ public class PrivateEventsController {
     @GetMapping("{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getRequestForEventById(@PathVariable Long userId,
-                                                          @PathVariable(name = "eventId") Long eventId) {
+                                                                @PathVariable(name = "eventId") Long eventId) {
         return eventsService.getRequestForEventById(userId, eventId);
     }
 }

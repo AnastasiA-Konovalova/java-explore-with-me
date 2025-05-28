@@ -1,6 +1,5 @@
 package ru.practicum.ewmservice.compilation.service;
 
-import org.springframework.web.bind.annotation.PathVariable;
 import ru.practicum.ewmservice.compilation.dto.CompilationDto;
 
 import java.util.List;

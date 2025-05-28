@@ -10,14 +10,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import ru.practicum.ewmservice.category.model.Category;
+import ru.practicum.ewmservice.event.enums.State;
 import ru.practicum.ewmservice.user.model.User;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter

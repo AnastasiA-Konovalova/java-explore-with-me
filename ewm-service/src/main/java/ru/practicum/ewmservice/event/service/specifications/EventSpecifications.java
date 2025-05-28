@@ -2,8 +2,8 @@ package ru.practicum.ewmservice.event.service.specifications;
 
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
+import ru.practicum.ewmservice.event.enums.State;
 import ru.practicum.ewmservice.event.model.Event;
-import ru.practicum.ewmservice.event.model.State;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

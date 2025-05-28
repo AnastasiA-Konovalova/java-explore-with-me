@@ -2,9 +2,9 @@ package ru.practicum.ewmservice.request.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.ewmservice.event.enums.State;
+import ru.practicum.ewmservice.event.enums.Status;
 import ru.practicum.ewmservice.event.model.Event;
-import ru.practicum.ewmservice.event.model.State;
-import ru.practicum.ewmservice.event.model.Status;
 import ru.practicum.ewmservice.event.repository.PrivateEventsRepository;
 import ru.practicum.ewmservice.event.service.PrivateEventsService;
 import ru.practicum.ewmservice.exception.ConflictException;

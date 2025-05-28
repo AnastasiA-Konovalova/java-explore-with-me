@@ -1,8 +1,8 @@
 package ru.practicum.ewmservice.category.mapper;
 
-import ru.practicum.ewmservice.category.model.Category;
 import ru.practicum.ewmservice.category.dto.CategoryDto;
 import ru.practicum.ewmservice.category.dto.NewCategoryDto;
+import ru.practicum.ewmservice.category.model.Category;
 
 public class CategoryMapper {
 
@@ -30,10 +30,8 @@ public class CategoryMapper {
     }
 
     public static Category toEntityCategoryUpdate(CategoryDto categoryDto, Category category) {
-        //category.setId(categoryDto.getId());
         category.setName(categoryDto.getName());
 
         return category;
     }
-
 }

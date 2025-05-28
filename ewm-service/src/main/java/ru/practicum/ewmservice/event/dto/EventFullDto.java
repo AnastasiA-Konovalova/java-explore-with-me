@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import ru.practicum.ewmservice.category.dto.CategoryDto;
+import ru.practicum.ewmservice.event.enums.State;
 import ru.practicum.ewmservice.event.model.Location;
-import ru.practicum.ewmservice.event.model.State;
 import ru.practicum.ewmservice.user.dto.UserShortDto;
 
 import java.time.LocalDateTime;

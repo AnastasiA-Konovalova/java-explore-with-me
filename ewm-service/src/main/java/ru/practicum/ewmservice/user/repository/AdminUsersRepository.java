@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import ru.practicum.ewmservice.category.model.Category;
 import ru.practicum.ewmservice.user.model.User;
 
 import java.util.List;
@@ -33,4 +32,6 @@ public interface AdminUsersRepository extends JpaRepository<User, Long> {
             @Param("from") Long from,
             @Param("size") Long size
     );
+
+    User findByEmail(String email);
 }

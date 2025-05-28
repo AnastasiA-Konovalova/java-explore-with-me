@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import ru.practicum.ewmservice.category.model.Category;
 import ru.practicum.ewmservice.category.repository.CategoriesRepository;
 import ru.practicum.ewmservice.event.dto.EventFullDto;
+import ru.practicum.ewmservice.event.enums.State;
 import ru.practicum.ewmservice.event.mapper.EventMapper;
 import ru.practicum.ewmservice.event.mapper.UpdateEventMapper;
 import ru.practicum.ewmservice.event.model.Event;
 import ru.practicum.ewmservice.event.model.Location;
-import ru.practicum.ewmservice.event.model.State;
 import ru.practicum.ewmservice.event.model.UpdateEventAdminRequest;
 import ru.practicum.ewmservice.event.repository.AdminEventsRepository;
 import ru.practicum.ewmservice.event.repository.LocationRepository;
@@ -25,7 +25,6 @@ import ru.practicum.ewmservice.exception.ValidationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,32 +44,8 @@ public class AdminEventsServiceImpl implements AdminEventsService {
         Page<Event> eventPage = eventsRepository.findAll(specification, pageRequest);
         System.out.println(eventPage);
         if (eventPage.isEmpty()) {
-           return List.of();
+            return List.of();
         }
-        System.out.println("======= ВСЕ СОБЫТИЯ В БАЗЕ =======");
-        for (Event event : eventsRepository.findAll()) {
-            System.out.println("id = " + event.getId());
-            System.out.println("initiatorId = " + event.getInitiator().getId());
-            System.out.println("state = " + event.getState());
-            System.out.println("categoryId = " + event.getCategory().getId());
-            System.out.println("eventDate = " + event.getEventDate());
-        }
-
-        for (Event event : eventPage.getContent()) {
-            System.out.println("FOUND EVENT:");
-            System.out.println("id = " + event.getId());
-            System.out.println("state = " + event.getState());
-            System.out.println("initiatorId = " + event.getInitiator().getId());
-            System.out.println("categoryId = " + event.getCategory().getId());
-            System.out.println("eventDate = " + event.getEventDate());
-        }
-
-
-//        List<String> uris = eventPage.getContent().stream()
-//                .map(event -> "/events" + event.getId())
-//                .toList();
-//
-//        List<ViewStatsDto> viewStatsDto = statsClient.get(statsR)
 
         return eventPage.getContent().stream()
                 .map(EventMapper::toFullDto)
@@ -80,8 +55,6 @@ public class AdminEventsServiceImpl implements AdminEventsService {
     @Override
     public EventFullDto updateById(UpdateEventAdminRequest updateEvent, Long eventId) {
         Event event = checkEvent(eventId);
-        Category category = publicCategoriesRepository.findById(event.getId()).orElseThrow(() -> new NotFoundException(" "));
-        Location location = locationRepository.findById(event.getId()).orElseThrow(() -> new NotFoundException(" "));
         if (updateEvent.getEventDate() != null) {
             LocalDateTime parsedDate = LocalDateTime.parse(updateEvent.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             if (parsedDate.isBefore(LocalDateTime.now()) || parsedDate.isBefore(LocalDateTime.now().plusHours(2))) {
@@ -89,6 +62,8 @@ public class AdminEventsServiceImpl implements AdminEventsService {
                         "Событие не может начаться раньше чем через два часа от публикации и раньше чем текущее время.");
             }
         }
+        Category category = publicCategoriesRepository.findById(event.getCategory().getId()).orElseThrow(() -> new NotFoundException(" вакпр"));
+        Location location = locationRepository.findById(event.getLocation().getId()).orElseThrow(() -> new NotFoundException(" выфчя"));
         event = UpdateEventMapper.toEventUpdateAdmin(updateEvent, event, category, location);
 
         return EventMapper.toFullDto(eventsRepository.save(event));

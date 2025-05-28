@@ -1,6 +1,5 @@
 package ru.practicum.ewmservice.user.service;
 
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.practicum.ewmservice.user.dto.UserDto;
 import ru.practicum.ewmservice.user.model.User;
 
