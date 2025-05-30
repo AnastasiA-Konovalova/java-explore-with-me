@@ -11,6 +11,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+//@RequiredArgsConstructor
 @Table(name = "locations")
 public class Location {
 
@@ -18,7 +19,7 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private float lat;
+    private Float lat;
 
-    private float lon;
+    private Float lon;
 }

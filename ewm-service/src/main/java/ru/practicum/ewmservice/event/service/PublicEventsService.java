@@ -3,13 +3,13 @@ package ru.practicum.ewmservice.event.service;
 import jakarta.servlet.http.HttpServletRequest;
 import ru.practicum.ewmservice.event.dto.EventFullDto;
 import ru.practicum.ewmservice.event.dto.EventShortDto;
+import ru.practicum.ewmservice.event.dto.ShortEventDtoRequest;
 
 import java.util.List;
 
 public interface PublicEventsService {
 
-    List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid, String rangeStart,
-                                  String rangeEnd, Boolean onlyAvailable, String sort, Long from, Long size, HttpServletRequest request);
+    List<EventShortDto> getEvents(ShortEventDtoRequest eventDtoRequest, Long from, Long size, HttpServletRequest request);
 
     EventFullDto getById(Long id, HttpServletRequest request);
 }

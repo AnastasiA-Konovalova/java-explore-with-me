@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.ewmservice.category.mapper.CategoryMapper;
 import ru.practicum.ewmservice.category.model.Category;
+import ru.practicum.ewmservice.category.repository.CategoriesRepository;
+import ru.practicum.ewmservice.category.service.AdminCategoryService;
 import ru.practicum.ewmservice.category.service.PublicCategoriesService;
 import ru.practicum.ewmservice.event.dto.EventFullDto;
 import ru.practicum.ewmservice.event.dto.EventShortDto;
@@ -41,6 +43,8 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
 
     private final PrivateEventsRepository eventsRepository;
     private final PublicCategoriesService categoriesService;
+    private final CategoriesRepository categoriesRepository;
+    private final AdminCategoryService adminCategoryService;
     private final AdminUsersService usersService;
     private final LocationRepository locationRepository;
     private final PrivateEventsRequestRepository eventsRequestRepository;
@@ -54,11 +58,14 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
                     "Событие не может начаться раньше чем через два часа от публикации и раньше чем текущее время.");
         }
         Category category = CategoryMapper.toEntityCategory(categoriesService.getById(eventDtoRequest.getCategory()));
-
         User initiator = usersService.getUserById(userId);
-        Location location = locationRepository.save(eventDtoRequest.getLocation());
+        Location location = new Location();
+        location.setLon(eventDtoRequest.getLocation().getLon());
+        location.setLat(eventDtoRequest.getLocation().getLat());
+        locationRepository.save(location);
 
-        Event event = EventMapper.toEntityForNewEvent(eventDtoRequest, category, userId, location);
+        Event event = EventMapper.toEntityForNewEvent(eventDtoRequest);
+        event.setCategory(category);
         event.setCreatedOn(LocalDateTime.now());
         event.setConfirmedRequests(0L);
         event.setLocation(location);
@@ -73,17 +80,23 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
         usersService.getUserById(userId);
         Event event = getById(eventId);
         checkConditionsForUpdate(event, userId, updateEvent.getEventDate());
-        Category category = null;
-        Location location = null;
+//        Category category = null;
+//        Location location = null;
         if (updateEvent.getCategory() != null) {
-            category = CategoryMapper.toEntityCategory(categoriesService.getById(updateEvent.getCategory().getId()));
+            //Category category = adminCategoryService.checkCategoryExists(updateEvent.getCategory().getId());
+            Category category = CategoryMapper.toEntityCategory(categoriesService.getById(updateEvent.getCategory().getId()));
+            event.setCategory(category);
         }
         if (updateEvent.getLocation() != null) {
-            location = locationRepository.save(updateEvent.getLocation());
+            Location location = new Location();
+            location.setLat(updateEvent.getLocation().getLat());
+            location.setLon(updateEvent.getLocation().getLon());
+            locationRepository.save(location);
+            event.setLocation(location);
         }
-        event = UpdateEventMapper.toEvent(updateEvent, event, category, location);
-        Event updatedEvent = eventsRepository.save(event);
+        UpdateEventMapper.toEvent(updateEvent, event);
 
+        Event updatedEvent = eventsRepository.save(event);
         return EventMapper.toFullDto(updatedEvent);
     }
 

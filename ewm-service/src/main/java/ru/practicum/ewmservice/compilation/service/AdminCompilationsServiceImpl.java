@@ -12,7 +12,7 @@ import ru.practicum.ewmservice.event.model.Event;
 import ru.practicum.ewmservice.event.repository.AdminEventsRepository;
 import ru.practicum.ewmservice.exception.NotFoundException;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -24,27 +24,36 @@ public class AdminCompilationsServiceImpl implements AdminCompilationsService {
 
     @Override
     public CompilationDto saveCompilations(NewCompilationDto newCompilationDto) {
-        if (newCompilationDto.getEvents() == null) {
-            newCompilationDto.setEvents(new ArrayList<>());
+        Compilation compilation = CompilationMapper.toEntity(newCompilationDto);
+        List<Event> events = Collections.emptyList();
+        if (newCompilationDto.getEvents() != null && !newCompilationDto.getEvents().isEmpty()) {
+            events = eventsRepository.findAllById(newCompilationDto.getEvents());
         }
-        List<Event> events = eventsRepository.findAllById(newCompilationDto.getEvents());
 
-        Compilation compilation = CompilationMapper.toEntity(newCompilationDto, events);
+        compilation.setEvents(events);
         return CompilationMapper.toDto(compilationsRepository.save(compilation));
     }
 
     @Override
     public CompilationDto updateCompilationById(UpdateCompilationRequest updateCompilationRequest, Long compId) {
         Compilation compilation = getById(compId);
-        List<Event> events = new ArrayList<>();
-        if (updateCompilationRequest.getEvents() != null && !updateCompilationRequest.getEvents().isEmpty()) {
-            events = eventsRepository.findAllById(updateCompilationRequest.getEvents());
+        CompilationMapper.toEntityUpdate(updateCompilationRequest, compilation);
+
+        if (updateCompilationRequest.getEvents() != null) {
+            List<Event> events;
+            if (updateCompilationRequest.getEvents().isEmpty()) {
+                events = Collections.emptyList();
+            } else {
+                events = eventsRepository.findAllById(updateCompilationRequest.getEvents());
+                if (events.size() != updateCompilationRequest.getEvents().size()) {
+                    throw new IllegalArgumentException("Some events not found");
+                }
+            }
+            compilation.setEvents(events);
         }
 
-        Compilation update = CompilationMapper.toEntityUpdate(updateCompilationRequest, events, compilation);
-        Compilation save = compilationsRepository.save(update);
-
-        return CompilationMapper.toDto(save);
+        Compilation saved = compilationsRepository.save(compilation);
+        return CompilationMapper.toDto(saved);
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.ewmservice.category.model.Category;
 import ru.practicum.ewmservice.category.repository.CategoriesRepository;
 import ru.practicum.ewmservice.event.dto.EventFullDto;
+import ru.practicum.ewmservice.event.dto.FullEventDtoRequest;
 import ru.practicum.ewmservice.event.enums.State;
 import ru.practicum.ewmservice.event.mapper.EventMapper;
 import ru.practicum.ewmservice.event.mapper.UpdateEventMapper;
@@ -37,8 +38,10 @@ public class AdminEventsServiceImpl implements AdminEventsService {
     private final LocationRepository locationRepository;
 
     @Override
-    public List<EventFullDto> getEventsByIds(List<Long> users, List<String> states, List<Long> categories, String rangeStart, String rangeEnd, Long from, Long size) {
-        Specification<Event> specification = EventSpecifications.filterEventConditionalsForGetByIds(users, states, categories, rangeStart, rangeEnd);
+    public List<EventFullDto> getEventsByIds(FullEventDtoRequest fullEventDtoRequest, Long from, Long size) {
+        Specification<Event> specification = EventSpecifications.filterEventConditionalsForGetByIds(
+                fullEventDtoRequest.getUsers(), fullEventDtoRequest.getStates(), fullEventDtoRequest.getCategories(),
+                fullEventDtoRequest.getRangeStart(), fullEventDtoRequest.getRangeEnd());
 
         PageRequest pageRequest = PageRequest.of((int) (from / size), size.intValue());
         Page<Event> eventPage = eventsRepository.findAll(specification, pageRequest);
@@ -61,9 +64,42 @@ public class AdminEventsServiceImpl implements AdminEventsService {
                         "Событие не может начаться раньше чем через два часа от публикации и раньше чем текущее время.");
             }
         }
-        Category category = publicCategoriesRepository.findById(event.getCategory().getId()).orElseThrow(() -> new NotFoundException(" вакпр"));
-        Location location = locationRepository.findById(event.getLocation().getId()).orElseThrow(() -> new NotFoundException(" выфчя"));
-        event = UpdateEventMapper.toEventUpdateAdmin(updateEvent, event, category, location);
+        if (updateEvent.getCategory() != null) {
+            Category category = publicCategoriesRepository.findById(updateEvent.getCategory())
+                    .orElseThrow(() -> new NotFoundException("Категория с id=" + updateEvent.getCategory() + " не найдена"));
+            event.setCategory(category);
+        }
+        if (updateEvent.getLocation() != null) {
+            Location location = new Location();
+            location.setLon(updateEvent.getLocation().getLon());
+            location.setLat(updateEvent.getLocation().getLat());
+            locationRepository.save(location);
+            event.setLocation(location);
+        }
+        if (updateEvent.getStateAction() != null) {
+            switch (updateEvent.getStateAction()) {
+                case PUBLISH_EVENT:
+                    if (event.getState() != State.PENDING) {
+                        throw new ConflictException("Событие можно опубликовать только из состояния ожидания публикации");
+                    }
+                    event.setState(State.PUBLISHED);
+                    event.setPublishedOn(LocalDateTime.now());
+                    break;
+                case REJECT_EVENT:
+                    if (event.getState() == State.PUBLISHED) {
+                        throw new ConflictException("Опубликованное событие нельзя отклонить");
+                    }
+                    event.setState(State.CANCELED);
+                    break;
+                default:
+                    throw new ConflictException("Иное действие, недоступное администратору " + updateEvent.getStateAction());
+            }
+        }
+        //Category category = publicCategoriesRepository.findById(event.getCategory().getId()).orElseThrow(() -> new NotFoundException(" вакпр"));
+        //Location location = locationRepository.findById(event.getLocation().getId()).orElseThrow(() -> new NotFoundException(" выфчя"));
+        //event = UpdateEventMapper.toEventUpdateAdmin(updateEvent, event, category, location);
+        UpdateEventMapper.toEventUpdateAdmin(updateEvent, event);
+
 
         return EventMapper.toFullDto(eventsRepository.save(event));
     }

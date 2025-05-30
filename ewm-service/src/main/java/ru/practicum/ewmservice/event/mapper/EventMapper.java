@@ -1,12 +1,10 @@
 package ru.practicum.ewmservice.event.mapper;
 
 import ru.practicum.ewmservice.category.mapper.CategoryMapper;
-import ru.practicum.ewmservice.category.model.Category;
 import ru.practicum.ewmservice.event.dto.EventFullDto;
 import ru.practicum.ewmservice.event.dto.EventShortDto;
 import ru.practicum.ewmservice.event.dto.NewEventDtoRequest;
 import ru.practicum.ewmservice.event.model.Event;
-import ru.practicum.ewmservice.event.model.Location;
 import ru.practicum.ewmservice.user.mapper.UserMapper;
 
 import java.time.LocalDateTime;
@@ -51,14 +49,12 @@ public class EventMapper {
         return eventFullDto;
     }
 
-    public static Event toEntityForNewEvent(NewEventDtoRequest newEventDto, Category category, Long userId, Location location) {
+    public static Event toEntityForNewEvent(NewEventDtoRequest newEventDto) {
         Event event = new Event();
         event.setAnnotation(newEventDto.getAnnotation());
-        event.setCategory(category);
         event.setDescription(newEventDto.getDescription());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         event.setEventDate(LocalDateTime.parse(newEventDto.getEventDate(), formatter));
-        event.setLocation(location);
         if (Boolean.TRUE.equals(newEventDto.getPaid())) {
             event.setPaid(true);
         } else {

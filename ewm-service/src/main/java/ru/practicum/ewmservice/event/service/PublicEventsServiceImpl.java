@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.ewmservice.event.dto.EventFullDto;
 import ru.practicum.ewmservice.event.dto.EventShortDto;
+import ru.practicum.ewmservice.event.dto.ShortEventDtoRequest;
+import ru.practicum.ewmservice.event.enums.EventSortOption;
 import ru.practicum.ewmservice.event.enums.State;
 import ru.practicum.ewmservice.event.mapper.EventMapper;
 import ru.practicum.ewmservice.event.model.Event;
@@ -32,23 +34,26 @@ public class PublicEventsServiceImpl implements PublicEventsService {
     private final StatsClient statsClient;
 
     @Override
-    public List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid, String rangeStart,
-                                         String rangeEnd, Boolean onlyAvailable, String sort,
+    public List<EventShortDto> getEvents(ShortEventDtoRequest eventDtoRequest,
                                          Long from, Long size, HttpServletRequest request) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        if (rangeStart != null && rangeEnd != null) {
-            LocalDateTime start = LocalDateTime.parse(rangeStart, formatter);
-            LocalDateTime end = LocalDateTime.parse(rangeEnd, formatter);
+        if (eventDtoRequest.getRangeStart() != null && eventDtoRequest.getRangeEnd()!= null) {
+            LocalDateTime start = LocalDateTime.parse(eventDtoRequest.getRangeStart(), formatter);
+            LocalDateTime end = LocalDateTime.parse(eventDtoRequest.getRangeEnd(), formatter);
             if (start.isAfter(end)) {
                 throw new ValidationException("rangeStart не может быть позже rangeEnd");
             }
         }
-        Specification<Event> specification = EventSpecifications.filterEventConditionals(text, categories, paid, rangeStart, rangeEnd, onlyAvailable);
+        Specification<Event> specification = EventSpecifications.filterEventConditionals(eventDtoRequest.getText(),
+                eventDtoRequest.getCategories(), eventDtoRequest.getPaid(), eventDtoRequest.getRangeStart(),
+                eventDtoRequest.getRangeEnd(), eventDtoRequest.getOnlyAvailable());
         Sort sortBy = Sort.unsorted();
-        if ("event_date".equalsIgnoreCase(sort)) {
-            sortBy = Sort.by(Sort.Direction.ASC, "eventDate");
-        } else if ("views".equalsIgnoreCase(sort)) {
-            sortBy = Sort.by(Sort.Direction.DESC, "views");
+        if (eventDtoRequest.getSort() != null) {
+            if (eventDtoRequest.getSort().equals(EventSortOption.EVENT_DATE)) {
+                sortBy = Sort.by(Sort.Direction.ASC, "eventDate");
+            } else if (eventDtoRequest.getSort().equals(EventSortOption.VIEWS)) {
+                sortBy = Sort.by(Sort.Direction.DESC, "views");
+            }
         }
 
         saveStats(request);

@@ -1,5 +1,6 @@
 package ru.practicum.ewmservice.event.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +8,9 @@ import lombok.Setter;
 @Getter
 public class LocationDto {
 
-    private float lat;
+    @NotNull(message = "Широта не может быть null")
+    private Float lat;
 
-    private float lon;
+    @NotNull(message = "Долгота не может быть null")
+    private Float lon;
 }
