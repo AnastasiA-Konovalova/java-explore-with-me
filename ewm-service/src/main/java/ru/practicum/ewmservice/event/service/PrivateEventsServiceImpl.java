@@ -6,8 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.ewmservice.category.mapper.CategoryMapper;
 import ru.practicum.ewmservice.category.model.Category;
-import ru.practicum.ewmservice.category.repository.CategoriesRepository;
-import ru.practicum.ewmservice.category.service.AdminCategoryService;
 import ru.practicum.ewmservice.category.service.PublicCategoriesService;
 import ru.practicum.ewmservice.event.dto.EventFullDto;
 import ru.practicum.ewmservice.event.dto.EventShortDto;
@@ -28,7 +26,7 @@ import ru.practicum.ewmservice.exception.ValidationException;
 import ru.practicum.ewmservice.request.dto.ParticipationRequestDto;
 import ru.practicum.ewmservice.request.mapper.EventRequestMapper;
 import ru.practicum.ewmservice.request.model.Request;
-import ru.practicum.ewmservice.request.repository.PrivateEventsRequestRepository;
+import ru.practicum.ewmservice.request.repository.EventsRequestRepository;
 import ru.practicum.ewmservice.user.model.User;
 import ru.practicum.ewmservice.user.service.AdminUsersService;
 
@@ -43,11 +41,9 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
 
     private final PrivateEventsRepository eventsRepository;
     private final PublicCategoriesService categoriesService;
-    private final CategoriesRepository categoriesRepository;
-    private final AdminCategoryService adminCategoryService;
     private final AdminUsersService usersService;
     private final LocationRepository locationRepository;
-    private final PrivateEventsRequestRepository eventsRequestRepository;
+    private final EventsRequestRepository eventsRequestRepository;
 
     public EventFullDto saveEvent(NewEventDtoRequest eventDtoRequest, Long userId) {
         if (LocalDateTime.parse(eventDtoRequest.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
@@ -80,10 +76,7 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
         usersService.getUserById(userId);
         Event event = getById(eventId);
         checkConditionsForUpdate(event, userId, updateEvent.getEventDate());
-//        Category category = null;
-//        Location location = null;
         if (updateEvent.getCategory() != null) {
-            //Category category = adminCategoryService.checkCategoryExists(updateEvent.getCategory().getId());
             Category category = CategoryMapper.toEntityCategory(categoriesService.getById(updateEvent.getCategory().getId()));
             event.setCategory(category);
         }

@@ -11,7 +11,6 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-//@RequiredArgsConstructor
 @Table(name = "locations")
 public class Location {
 

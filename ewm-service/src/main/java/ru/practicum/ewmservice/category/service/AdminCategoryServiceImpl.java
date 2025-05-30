@@ -43,7 +43,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
                     .collect(Collectors.joining(", "));
 
             if (eventList.size() > 5) {
-                events += " и другие...";
+                events += " и другие.";
             }
             throw new ConflictException("Категория с id " + id + " не должна быть связана с существующим событием. " +
                     "События: " + events);

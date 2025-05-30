@@ -95,11 +95,7 @@ public class AdminEventsServiceImpl implements AdminEventsService {
                     throw new ConflictException("Иное действие, недоступное администратору " + updateEvent.getStateAction());
             }
         }
-        //Category category = publicCategoriesRepository.findById(event.getCategory().getId()).orElseThrow(() -> new NotFoundException(" вакпр"));
-        //Location location = locationRepository.findById(event.getLocation().getId()).orElseThrow(() -> new NotFoundException(" выфчя"));
-        //event = UpdateEventMapper.toEventUpdateAdmin(updateEvent, event, category, location);
         UpdateEventMapper.toEventUpdateAdmin(updateEvent, event);
-
 
         return EventMapper.toFullDto(eventsRepository.save(event));
     }

@@ -18,9 +18,4 @@ public class FullEventDtoRequest {
     private String rangeStart;
 
     private String rangeEnd;
-//    @JsonProperty(defaultValue = "0")
-//    private Long from;
-//
-//    @JsonProperty(defaultValue = "10")
-//    private Long size;
 }

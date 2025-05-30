@@ -46,9 +46,6 @@ public class UpdateEventMapper {
         if (updateEvent.getAnnotation() != null) {
             event.setAnnotation(updateEvent.getAnnotation());
         }
-//        if (updateEvent.getCategory() != null) {
-//            event.setCategory(category);
-//        }
         if (updateEvent.getDescription() != null) {
             event.setDescription(updateEvent.getDescription());
         }
@@ -56,9 +53,6 @@ public class UpdateEventMapper {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             event.setEventDate(LocalDateTime.parse(updateEvent.getEventDate(), formatter));
         }
-//        if (updateEvent.getLocation() != null) {
-//            event.setLocation(location);
-//        }
         if (updateEvent.getPaid() != null) {
             event.setPaid(updateEvent.getPaid());
         }

@@ -55,7 +55,6 @@ public class PublicEventsServiceImpl implements PublicEventsService {
                 sortBy = Sort.by(Sort.Direction.DESC, "views");
             }
         }
-
         saveStats(request);
 
         PageRequest pageRequest = PageRequest.of((int) (from / size), size.intValue(), sortBy);
