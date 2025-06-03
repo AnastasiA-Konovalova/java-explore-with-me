@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.StatsRequestDto;
+import ru.practicum.stats.exception.ValidationException;
 import ru.practicum.stats.mapper.EndpointHitMapper;
 import ru.practicum.stats.model.App;
 import ru.practicum.stats.model.EndpointHit;
@@ -31,13 +32,16 @@ public class StatsServiceImpl implements StatsService {
                 .orElseGet(() -> appRepository.save(new App(appName)));
         EndpointHit endpointHit = EndpointHitMapper.toEntity(endpointHitDto, app);
         endpointHit.setApp(app);
-
         statsRepository.save(endpointHit);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ViewStatsProjection> get(StatsRequestDto statsRequestDto) {
+        if (statsRequestDto.getStart().isAfter(statsRequestDto.getEnd())) {
+            throw new ValidationException("Начало временного промежутка должно быть раньше его окончания");
+        }
+
         if (statsRequestDto.getUris() == null || statsRequestDto.getUris().isEmpty()) {
             if (statsRequestDto.getUnique()) {
                 return statsRepository.findAllNotUrisStatsUnique(statsRequestDto.getStart(), statsRequestDto.getEnd());

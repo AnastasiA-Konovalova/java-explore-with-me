@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface StatsRepository extends JpaRepository<EndpointHit, Integer> {
-    @Query(value = "SELECT a.name, e.uri, COUNT(*) AS hits " +
+public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
+    @Query(value = "SELECT a.name AS app, e.uri, COUNT(*) AS hits " +
             "FROM endpoint_hits e " +
             "JOIN apps a ON e.app = a.id " +
             "WHERE e.act_time BETWEEN :start AND :end " +
@@ -23,7 +23,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Integer> {
             @Param("end") LocalDateTime end
     );
 
-    @Query(value = "SELECT a.name, e.uri, COUNT(DISTINCT e.ip) AS hits " +
+    @Query(value = "SELECT a.name AS app, e.uri, COUNT(DISTINCT e.ip) AS hits " +
             "FROM endpoint_hits e " +
             "JOIN apps a ON e.app = a.id " +
             "WHERE e.act_time BETWEEN :start AND :end " +
@@ -34,7 +34,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Integer> {
             @Param("end") LocalDateTime end
     );
 
-    @Query(value = "SELECT a.name, e.uri, COUNT(*) AS hits " +
+    @Query(value = "SELECT a.name AS app, e.uri, COUNT(*) AS hits " +
             "FROM endpoint_hits e " +
             "JOIN apps a ON e.app = a.id " +
             "WHERE e.act_time BETWEEN :start AND :end " +
@@ -47,7 +47,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Integer> {
             @Param("uris") List<String> uris
     );
 
-    @Query(value = "SELECT a.name, e.uri, COUNT(DISTINCT e.ip) AS hits " +
+    @Query(value = "SELECT a.name AS app, e.uri, COUNT(DISTINCT e.ip) AS hits " +
             "FROM endpoint_hits e " +
             "JOIN apps a ON e.app = a.id " +
             "WHERE e.act_time BETWEEN :start AND :end " +
