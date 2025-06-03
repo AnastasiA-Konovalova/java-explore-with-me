@@ -7,7 +7,7 @@ import ru.practicum.ewmservice.request.model.Request;
 
 import java.util.List;
 
-public interface PrivateEventsRequestRepository extends JpaRepository<Request, Long> {
+public interface EventRequestRepository extends JpaRepository<Request, Long> {
 
     @Query(value = "SELECT * " +
             "FROM requests r " +
@@ -19,5 +19,3 @@ public interface PrivateEventsRequestRepository extends JpaRepository<Request, L
 
     boolean existsByRequesterIdAndEventId(Long userId, Long eventId);
 }
-
-

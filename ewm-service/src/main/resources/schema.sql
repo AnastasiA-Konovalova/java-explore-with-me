@@ -61,3 +61,14 @@ CREATE TABLE IF NOT EXISTS compilation_events (
     CONSTRAINT fk_ce_compilation_id FOREIGN KEY (compilation_id) REFERENCES compilations (id),
     CONSTRAINT fk_ce_event_id FOREIGN KEY (event_id) REFERENCES events (id)
 );
+
+CREATE TABLE IF NOT EXISTS comments (
+    id SERIAL PRIMARY KEY,
+    text VARCHAR NOT NULL,
+    event_id BIGINT NOT NULL,
+    commentator_id BIGINT NOT NULL,
+    status VARCHAR NOT NULL,
+    comment_time TIMESTAMP DEFAULT now(),
+    CONSTRAINT fk_comment_users FOREIGN KEY (commentator_id) REFERENCES users (id),
+    CONSTRAINT fk_comment_events FOREIGN KEY (event_id) REFERENCES events (id)
+);

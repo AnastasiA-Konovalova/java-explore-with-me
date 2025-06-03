@@ -26,7 +26,7 @@ import ru.practicum.ewmservice.exception.ValidationException;
 import ru.practicum.ewmservice.request.dto.ParticipationRequestDto;
 import ru.practicum.ewmservice.request.mapper.EventRequestMapper;
 import ru.practicum.ewmservice.request.model.Request;
-import ru.practicum.ewmservice.request.repository.PrivateEventsRequestRepository;
+import ru.practicum.ewmservice.request.repository.EventRequestRepository;
 import ru.practicum.ewmservice.user.model.User;
 import ru.practicum.ewmservice.user.service.AdminUsersService;
 
@@ -43,7 +43,7 @@ public class PrivateEventsServiceImpl implements PrivateEventsService {
     private final PublicCategoriesService categoriesService;
     private final AdminUsersService usersService;
     private final LocationRepository locationRepository;
-    private final PrivateEventsRequestRepository eventsRequestRepository;
+    private final EventRequestRepository eventsRequestRepository;
 
     public EventFullDto saveEvent(NewEventDtoRequest eventDtoRequest, Long userId) {
         if (LocalDateTime.parse(eventDtoRequest.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
