@@ -18,9 +18,6 @@ public class PublicCategoriesServiceImpl implements PublicCategoriesService {
 
     public List<CategoryDto> get(Long from, Long size) {
         List<Category> categories = categoriesRepository.getNameWithSizeAndSkipFrom(from, size);
-        if (categories.isEmpty()) {
-            return List.of();
-        }
         return categories.stream()
                 .map(CategoryMapper::toDto)
                 .toList();

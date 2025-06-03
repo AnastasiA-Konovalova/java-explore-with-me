@@ -7,7 +7,7 @@ import ru.practicum.ewmservice.exception.NotFoundException;
 import ru.practicum.ewmservice.user.dto.UserDto;
 import ru.practicum.ewmservice.user.mapper.UserMapper;
 import ru.practicum.ewmservice.user.model.User;
-import ru.practicum.ewmservice.user.repository.AdminUsersRepository;
+import ru.practicum.ewmservice.user.repository.UsersRepository;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminUsersServiceImpl implements AdminUsersService {
 
-    private final AdminUsersRepository userRepository;
+    private final UsersRepository userRepository;
 
     @Override
     public List<UserDto> getUsersWithConditions(List<Long> ids, Long from, Long size) {

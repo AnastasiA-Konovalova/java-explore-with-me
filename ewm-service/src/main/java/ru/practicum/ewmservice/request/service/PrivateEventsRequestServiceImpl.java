@@ -13,7 +13,7 @@ import ru.practicum.ewmservice.exception.ValidationException;
 import ru.practicum.ewmservice.request.dto.ParticipationRequestDto;
 import ru.practicum.ewmservice.request.mapper.EventRequestMapper;
 import ru.practicum.ewmservice.request.model.Request;
-import ru.practicum.ewmservice.request.repository.EventRequestRepository;
+import ru.practicum.ewmservice.request.repository.EventsRequestRepository;
 import ru.practicum.ewmservice.user.model.User;
 import ru.practicum.ewmservice.user.service.AdminUsersService;
 
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PrivateEventsRequestServiceImpl implements PrivateEventsRequestService {
 
-    private final EventRequestRepository eventsRequestRepository;
+    private final EventsRequestRepository eventsRequestRepository;
     private final AdminUsersService usersService;
     private final PrivateEventsService eventsService;
     private final PrivateEventsRepository privateEventsRepository;
@@ -63,7 +63,6 @@ public class PrivateEventsRequestServiceImpl implements PrivateEventsRequestServ
         if (alreadyExists) {
             throw new ConflictException("Повторный запрос невозможен.");
         }
-
         request.setEvent(event);
         request.setCreated(LocalDateTime.now());
         request.setRequester(user);

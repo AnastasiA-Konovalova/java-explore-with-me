@@ -16,6 +16,7 @@ public class ErrorHandler {
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(ValidationException e) {
+        log.error("ValidationException: {}", e.getMessage(), e);
         return new ErrorResponse(
                 "BAD_REQUEST",
                 "Incorrectly made request.",
@@ -27,6 +28,7 @@ public class ErrorHandler {
     @ExceptionHandler(ConflictException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleConflictException(ConflictException e) {
+        log.error("ConflictException: {}", e.getMessage(), e);
         return new ErrorResponse(
                 "CONFLICT",
                 "For the requested operation the conditions are not met.",
@@ -38,6 +40,7 @@ public class ErrorHandler {
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(NotFoundException e) {
+        log.error("NotFoundException: {}", e.getMessage(), e);
         return new ErrorResponse(
                 "NOT_FOUND",
                 "The required object was not found.",
@@ -49,6 +52,7 @@ public class ErrorHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleTypeMismatch(MethodArgumentTypeMismatchException e) {
+        log.error("MethodArgumentTypeMismatchException: {}", e.getMessage(), e);
         return new ErrorResponse(
                 "BAD_REQUEST",
                 "Incorrectly made request.",

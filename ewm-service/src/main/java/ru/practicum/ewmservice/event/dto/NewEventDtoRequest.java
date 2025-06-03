@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.ewmservice.event.model.Location;
 
 @Getter
 @Setter
@@ -29,7 +28,7 @@ public class NewEventDtoRequest {
     private String eventDate;
 
     @NotNull
-    private Location location;
+    private LocationDto location;
 
     @JsonProperty(defaultValue = "false")
     private Boolean paid;

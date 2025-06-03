@@ -14,6 +14,7 @@ import ru.practicum.ewmservice.exception.ConflictException;
 import ru.practicum.ewmservice.exception.NotFoundException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,19 +37,28 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         checkCategoryExists(id);
         List<Event> eventList = eventsRepository.findAllByCategoryId(id);
         if (!eventList.isEmpty()) {
-            throw new ConflictException("Категория не должна быть связана с существующим событием.");
+            String events = eventList.stream()
+                    .limit(5)
+                    .map(Event::toString)
+                    .collect(Collectors.joining(", "));
+
+            if (eventList.size() > 5) {
+                events += " и другие.";
+            }
+            throw new ConflictException("Категория с id " + id + " не должна быть связана с существующим событием. " +
+                    "События: " + events);
         }
         categoryRepository.deleteById(id);
     }
 
     public CategoryDto updateById(CategoryDto categoryDto, Long catId) {
-        Category category = checkCategoryUpdate(categoryDto, catId);
-        Category categoryUpdate = CategoryMapper.toEntityCategoryUpdate(categoryDto, category);
+        checkCategoryUpdate(categoryDto, catId);
+        Category categoryUpdate = CategoryMapper.toEntityCategoryUpdate(categoryDto);
 
         return CategoryMapper.toDto(categoryRepository.save(categoryUpdate));
     }
 
-    private Category checkCategoryExists(Long id) {
+    public Category checkCategoryExists(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Категория с id " + id + " не найдена."));
     }

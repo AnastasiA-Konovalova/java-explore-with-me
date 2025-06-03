@@ -29,7 +29,8 @@ public class CategoryMapper {
         return category;
     }
 
-    public static Category toEntityCategoryUpdate(CategoryDto categoryDto, Category category) {
+    public static Category toEntityCategoryUpdate(CategoryDto categoryDto) {
+        Category category = new Category();
         category.setName(categoryDto.getName());
 
         return category;

@@ -9,7 +9,7 @@ import ru.practicum.ewmservice.user.model.User;
 import java.util.List;
 
 @Repository
-public interface AdminUsersRepository extends JpaRepository<User, Long> {
+public interface UsersRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * " +
             "FROM users u " +
