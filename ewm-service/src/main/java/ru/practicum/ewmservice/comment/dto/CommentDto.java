@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.practicum.ewmservice.comment.model.CommentStatus;
 import ru.practicum.ewmservice.event.model.Event;
-import ru.practicum.ewmservice.user.model.User;
 
 import java.time.LocalDateTime;
 

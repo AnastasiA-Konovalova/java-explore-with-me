@@ -70,7 +70,7 @@ public class PrivateCommentServiceImpl implements PrivateCommentService {
                 .orElseThrow(() -> new NotFoundException("Комментарий с id " + commentId + " не найден"));
         usersService.getUserById(userId);
         Event event = eventsService.getById(eventId);
-        checkCommentOwner(commentId, userId);
+        checkCommentOwner(comment.getCommentator().getId(), userId);
         checkConditions(eventId);
         CommentsMapper.toUpdatedEntity(updateCommentDto, comment);
         comment.setEvent(event);

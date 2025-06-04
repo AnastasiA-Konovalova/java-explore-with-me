@@ -24,10 +24,8 @@ public class CommentsMapper {
     public static Comment toEntity(NewCommentDto commentDto) {
         Comment comment = new Comment();
         comment.setText(commentDto.getText());
-        //comment.setCommentator(commentDto.getCommentator());
         comment.setCommentTime(LocalDateTime.now());
         comment.setStatus(commentDto.getStatus());
-        //comment.setEvent(commentDto.getEventId());
 
         return comment;
     }
@@ -42,6 +40,4 @@ public class CommentsMapper {
         comment.setCommentTime(LocalDateTime.now());
         return comment;
     }
-
-
 }

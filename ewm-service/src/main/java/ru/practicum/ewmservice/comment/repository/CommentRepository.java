@@ -24,7 +24,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long>, JpaSpec
             @Param("size") Long size
     );
 
-    //List<Comment> findAllByEventId(Long eventId);
-
     List<Comment> findAllByCommentatorId(Long userId);
 }
