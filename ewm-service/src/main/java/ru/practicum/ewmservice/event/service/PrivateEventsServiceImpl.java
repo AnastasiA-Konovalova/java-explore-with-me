@@ -26,6 +26,7 @@ import ru.practicum.ewmservice.exception.ValidationException;
 import ru.practicum.ewmservice.request.dto.ParticipationRequestDto;
 import ru.practicum.ewmservice.request.mapper.EventRequestMapper;
 import ru.practicum.ewmservice.request.model.Request;
+
 import ru.practicum.ewmservice.request.repository.EventsRequestRepository;
 import ru.practicum.ewmservice.user.model.User;
 import ru.practicum.ewmservice.user.service.AdminUsersService;
